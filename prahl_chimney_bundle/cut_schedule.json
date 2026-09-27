@@ -1,0 +1,62 @@
+[
+  {
+    "mark": "BRK-RUN",
+    "name": "Modular Red Clay Facing Brick (Running Courses: 15)",
+    "stock": "Standard Modular Red Clay Facing Brick (2-1/4\" x 3-5/8\" x 7-5/8\")",
+    "cut_length_in": 8.0,
+    "plumb_cut_angle_deg": 0.0,
+    "seat_cut_angle_deg": 0.0,
+    "quantity": 210,
+    "fasteners": "Spec-Mix Type N Mortar (1/2\" full bed joints)"
+  },
+  {
+    "mark": "BRK-SLD",
+    "name": "Architectural Soldier Brick Courses (Soldier Courses: 4)",
+    "stock": "Standard Modular Red Clay Facing Brick (2-1/4\" x 3-5/8\" x 7-5/8\") (Vertical Orientation)",
+    "cut_length_in": 8.0,
+    "plumb_cut_angle_deg": 0.0,
+    "seat_cut_angle_deg": 0.0,
+    "quantity": 164,
+    "fasteners": "Spec-Mix Type N Mortar (narrow face exposed)"
+  },
+  {
+    "mark": "FLUE-01",
+    "name": "Vitrified Clay Flue Liner Sections",
+    "stock": "8\" x 12\" Vitrified Clay Flue Liner 24\" sections",
+    "cut_length_in": 24.0,
+    "plumb_cut_angle_deg": 0.0,
+    "seat_cut_angle_deg": 0.0,
+    "quantity": 3,
+    "fasteners": "Refractory non-water-soluble mortar"
+  },
+  {
+    "mark": "FLSH-STP",
+    "name": "Base Step Flashing Tins (10\"x10\")",
+    "stock": "26-gauge Painted Steel Step Flashing Tins",
+    "cut_length_in": 10.0,
+    "plumb_cut_angle_deg": 0.0,
+    "seat_cut_angle_deg": 0.0,
+    "quantity": 25,
+    "fasteners": "Woven with shingle courses along roof pitch"
+  },
+  {
+    "mark": "FLSH-CTR",
+    "name": "Reglet Counter Flashing",
+    "stock": "26-gauge Prepainted Steel Counter Flashing 10-ft",
+    "cut_length_in": 120.0,
+    "plumb_cut_angle_deg": 0.0,
+    "seat_cut_angle_deg": 0.0,
+    "quantity": 2,
+    "fasteners": "Saw-cut mortar reglet joint + MasterSeal NP1"
+  },
+  {
+    "mark": "CRN-01",
+    "name": "Monolithic Reinforced Concrete Wash Crown",
+    "stock": "Reinforced Cast-in-Place Concrete Crown with Drip Edge",
+    "cut_length_in": 36.0,
+    "plumb_cut_angle_deg": 0.0,
+    "seat_cut_angle_deg": 0.0,
+    "quantity": 1,
+    "fasteners": "Sakrete 5000 Plus with diamond metal lath reinforcement"
+  }
+]

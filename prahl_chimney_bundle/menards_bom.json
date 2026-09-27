@@ -1,0 +1,73 @@
+{
+  "supplier": "Menards (Wisconsin Rapids Store #3107)",
+  "line_items": [
+    {
+      "sku": "1791012",
+      "description": "Standard Modular Red Clay Facing Brick",
+      "quantity": 450,
+      "unit_price": 0.89,
+      "total_price": 400.5
+    },
+    {
+      "sku": "1891125",
+      "description": "Spec-Mix Type N Masonry Mortar 80 lb",
+      "quantity": 9,
+      "unit_price": 11.49,
+      "total_price": 103.41
+    },
+    {
+      "sku": "1891040",
+      "description": "8\" x 12\" x 24\" Vitrified Clay Flue Liner",
+      "quantity": 3,
+      "unit_price": 38.5,
+      "total_price": 115.5
+    },
+    {
+      "sku": "1568214",
+      "description": "10\" x 10\" Painted Steel Step Flashing (Pack of 25)",
+      "quantity": 1,
+      "unit_price": 28.99,
+      "total_price": 28.99
+    },
+    {
+      "sku": "1568240",
+      "description": "26-gauge Prepainted Steel Counter-Flashing 10-ft",
+      "quantity": 2,
+      "unit_price": 24.5,
+      "total_price": 49.0
+    },
+    {
+      "sku": "1891150",
+      "description": "Sakrete 5000 Plus High Strength Concrete Mix 60 lb",
+      "quantity": 2,
+      "unit_price": 6.49,
+      "total_price": 12.98
+    },
+    {
+      "sku": "5202100",
+      "description": "MasterSeal NP1 Polyurethane Masonry Sealant (10.1oz)",
+      "quantity": 2,
+      "unit_price": 10.99,
+      "total_price": 21.98
+    },
+    {
+      "sku": "2181050",
+      "description": "Galvanized Diamond Mesh Metal Lath 27\" x 96\"",
+      "quantity": 1,
+      "unit_price": 14.99,
+      "total_price": 14.99
+    }
+  ],
+  "material_retail_subtotal": 747.35,
+  "material_markup_rate": 0.15,
+  "material_client_price": 859.45,
+  "labor_hours": 24.0,
+  "labor_rate_hourly": 80.0,
+  "labor_client_total": 1920.0,
+  "turnkey_contract_proposal_price": 2779.45,
+  "gross_margin": 2032.1,
+  "duration_days": 2.5,
+  "daily_profit": 812.84,
+  "profit_floor_min_per_day": 350.0,
+  "profit_floor_protected": true
+}
