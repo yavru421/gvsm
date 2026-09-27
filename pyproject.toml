@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gvsm"
+version = "1.0.0"
+description = "Grounded Visual Site Modeling (GVSM) - Zero-Hallucination Architectural Site Modeling & Persuasive Visualization Engine"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "John Dondlinger", email = "johndondlinger21@gmail.com" }
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Topic :: Multimedia :: Graphics",
+  "Programming Language :: Python :: 3",
+]
+dependencies = []
+
+[project.scripts]
+gvsm = "gvsm.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gvsm*"]
