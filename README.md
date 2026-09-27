@@ -3,29 +3,20 @@
 > **Zero-Hallucination Architectural Site Modeling & Persuasive Engineering Visualization**  
 > *Anchored directly to physical jobsite substrate. Powered by multimodal latent diffusion, trade craftsmanship, and deterministic CAD.*
 
----
-
-## 1. Executive Overview
-
-In modern construction and remodeling, contractors face a painful dilemma during bidding and change orders:
-- **The Blind Estimate (Paper/QuickBooks)**: Handing the customer a vague text description (`"Frame soffit and skin in Pro-Rib - $5,400"`). Clients lack spatial imagination, leading to hesitation, sticker shock, or bitter punch-list disputes when the finished build doesn't match what they pictured in their heads.
-- **Traditional ArchViz (Revit / Lumion / 3ds Max)**: Spending 15–30 hours and $1,500+ building 3D meshes from scratch—completely uneconomical for a solo tradesman on a $3,000 to $15,000 job.
-- **Blind Text-to-Image AI (Midjourney / Standard Diffusion)**: Generates ungrounded fantasies. It invents rooms that don't exist, warps 16" O.C. framing, hallucinates impossible stair rises, and creates zero legal or technical credibility.
-
-**Grounded Visual Site Modeling (GVSM)** solves this by **anchoring multimodal diffusion directly to authentic on-site progress photographs**. 
-
-Instead of generating pixels out of pure noise, GVSM uses the physical room's vanishing points, structural tie-in framing, ambient illumination, and existing walls as an immovable substrate. The contractor speaks natural tradesman field notes into a voice memo, and GVSM transforms the photo into a photorealistic architectural cutaway showing the finished trade materials and internal rough-in carpentry.
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
+[![License: Proprietary](https://img.shields.io/badge/license-ZLA%20Field%20Operations-orange.svg)](#license--credits)
+[![Dual Deliverable](https://img.shields.io/badge/standard-Rule%2011%20Compliant-green.svg)](#4-the-dual-deliverable-truth-composition)
 
 ---
 
-## 2. Side-by-Side Proof of Performance
+## 1. Side-by-Side Proof of Performance
 
-All examples below were generated from real-world field photographs taken on site by John Dondlinger (Dondlinger General Contracting) and processed directly through the GVSM engine.
+Every example below was generated directly from real-world jobsite photographs taken on site by John Dondlinger (Dondlinger General Contracting) and processed through the GVSM engine.
 
 ### Project 1: Chuck Miller Garage Shop — Suspended HVAC Soffit Enclosure
 *Location*: Commercial / Residential Garage Shop (Chuck & Sharon Miller)  
 *Objective*: Enclose a suspended overhead furnace unit and horizontal spiral ductwork inside a clean, insulated mechanical soffit cradle. Clad with vertical Bright White Pro-Rib steel, front return air grille, and a 15/16" drop ceiling grid with foil-faced insulation.  
-*Result*: Chuck and Sharon Miller **separately** loved the render and accepted Change Order CO-02 ($1,850.85) on sight with **zero hesitation and zero questions asked**.
+*Result*: Chuck and Sharon Miller **separately** loved the render and approved Change Order CO-02 ($1,850.85) on sight with **zero hesitation and zero questions asked**.
 
 #### View A: The Mechanical Cradle & Finished Cutaway
 | Baseline Jobsite Photo (Before) | GVSM Architectural Cutaway Remodel (After) |
@@ -104,6 +95,19 @@ All examples below were generated from real-world field photographs taken on sit
 | :---: |
 | ![Forensic Infographic](images/madden_patio/gvsm_forensic_collapse_infographic.jpg) |
 | *Visual engineering proof showing the 3,500 lb wet snowpack bellying rafters, red crosshairs where 6-ft fence posts snap under lateral thrust at groundline, and yellow racking vectors showing unbraced posts sliding off the slab.* |
+
+---
+
+## 2. Executive Overview & Problem Statement
+
+In modern construction and remodeling, contractors face a painful dilemma during bidding and change orders:
+- **The Blind Estimate (Paper/QuickBooks)**: Handing the customer a vague text description (`"Frame soffit and skin in Pro-Rib - $5,400"`). Clients lack spatial imagination, leading to hesitation, sticker shock, or bitter punch-list disputes when the finished build doesn't match what they pictured in their heads.
+- **Traditional ArchViz (Revit / Lumion / 3ds Max)**: Spending 15–30 hours and $1,500+ building 3D meshes from scratch—completely uneconomical for a solo tradesman on a $3,000 to $15,000 job.
+- **Blind Text-to-Image AI (Midjourney / Standard Diffusion)**: Generates ungrounded fantasies. It invents rooms that don't exist, warps 16" O.C. framing, hallucinates impossible stair rises, and creates zero legal or technical credibility.
+
+**Grounded Visual Site Modeling (GVSM)** solves this by **anchoring multimodal diffusion directly to authentic on-site progress photographs**. 
+
+Instead of generating pixels out of pure noise, GVSM uses the physical room's vanishing points, structural tie-in framing, ambient illumination, and existing walls as an immovable substrate. The contractor speaks natural tradesman field notes into a voice memo, and GVSM transforms the photo into a photorealistic architectural cutaway showing the finished trade materials and internal rough-in carpentry.
 
 ---
 
@@ -186,33 +190,77 @@ GVSM is never deployed as an isolated image. In production proposals and buildin
 
 ---
 
-## 6. Repository Structure
+## 6. Codebase Architecture & CLI Quickstart
+
+The repository includes a complete, self-contained Python engine, deterministic CAD generator, pre-flight validator, and interactive split-curtain comparison suite.
+
+### Installation
+```bash
+git clone https://github.com/yavru421/gvsm.git
+cd gvsm
+pip install -e .
+```
+
+### CLI Commands
+```bash
+# 1. Compile a voice memo and photo into a 5-layer GVSM prompt
+gvsm compile --photo images/chuck_miller_soffit/before_hvac_cradle.jpg \
+             --memo "Wrap this cradle in vertical prorib steel with drop grid polyiso underside"
+
+# 2. Generate a deterministic vector CAD blueprint
+gvsm cad --type stairs --out stair_section.svg
+gvsm cad --type soffit --out soffit_cradle.svg
+
+# 3. Pre-flight check photo and memo for GVSM invariants (anti-refeed, scope mismatches)
+gvsm validate --photo images/lukaszewski_stairs/before_descent.jpg --memo "Build 11-riser staircase"
+
+# 4. Launch the interactive split-curtain comparison viewer
+gvsm serve --port 8080
+```
+
+### Running Tests
+```bash
+python -m unittest tests/test_compiler.py
+```
+
+---
+
+## 7. Interactive Split-Curtain Comparison Suite
+
+Open `web/index.html` in any browser (or run `gvsm serve`) to interactively scrub between the raw substrate and the GVSM cutaway visualizations:
+
+* **Interactive Curtain Slider**: Scrub 0–100% across the authentic site photo and the GVSM render.
+* **Dual-Deliverable Inspector**: Inspect the compiled 5-layer prompt spec and the millimeter-accurate vector CAD blueprint side-by-side.
+* **Pre-Loaded Projects**: Chuck Miller HVAC Soffit, Lukaszewski Stairs, and Madden Patio Canopy.
+
+---
+
+## 8. Repository Structure
 
 ```
+├── gvsm/
+│   ├── __init__.py           # Package exports & version
+│   ├── compiler.py           # 5-layer semantic prompt compiler & voice memo parser
+│   ├── cad.py                # Deterministic inline SVG CAD generator (stairs, soffits)
+│   ├── validator.py          # Anti-refeed guard & multi-element scope mismatch detector
+│   ├── pipeline.py           # End-to-end dual-deliverable orchestration pipeline
+│   └── cli.py                # Command-line interface (compile, cad, validate, serve)
 ├── images/
-│   ├── chuck_miller_soffit/
-│   │   ├── before_hvac_cradle.jpg
-│   │   ├── gvsm_soffit_cutaway.jpg
-│   │   └── gvsm_foil_mesh_soffit.jpg
-│   ├── lukaszewski_stairs/
-│   │   ├── before_hallway.jpg
-│   │   ├── gvsm_remodel.jpg
-│   │   ├── before_descent.jpg
-│   │   ├── gvsm_descent.jpg
-│   │   ├── before_framing.jpg
-│   │   └── gvsm_framing_cutaway.jpg
-│   └── madden_patio/
-│       ├── before_patio.jpg
-│       ├── gvsm_literal_wedge.jpg
-│       ├── gvsm_work_pavilion.jpg
-│       ├── gvsm_scrapper_nook.jpg
-│       └── gvsm_forensic_collapse_infographic.jpg
+│   ├── chuck_miller_soffit/  # Chuck Miller HVAC framing & GVSM cutaways
+│   ├── lukaszewski_stairs/   # Lukaszewski basement stairway & headroom cutaways
+│   └── madden_patio/         # Madden patio canopy, pavilion & collapse infographic
+├── tests/
+│   └── test_compiler.py      # Automated unit and integration test suite
+├── web/
+│   └── index.html            # Zero-dependency interactive split-curtain viewer
+├── pyproject.toml            # Python package setup & CLI entrypoint
+├── .gitignore                # Git exclusions
 └── README.md
 ```
 
 ---
 
-## 7. License & Credits
+## 9. License & Credits
 
 Developed by **John Dondlinger** ([Dondlinger General Contracting](https://dondlingergc.com)) in collaboration with **Antigravity** (Google DeepMind Advanced Agentic Coding).  
 Proprietary methodology for Zero-Liability Architecture (ZLA) field operations.
