@@ -22,7 +22,28 @@ Instead of generating pixels out of pure noise, GVSM uses the physical room's va
 
 All examples below were generated from real-world field photographs taken on site by John Dondlinger (Dondlinger General Contracting) and processed directly through the GVSM engine.
 
-### Project 1: Lukaszewski Stairway & Bulkhead Remodel
+### Project 1: Chuck Miller Garage Shop — Suspended HVAC Soffit Enclosure
+*Location*: Commercial / Residential Garage Shop (Chuck & Sharon Miller)  
+*Objective*: Enclose a suspended overhead furnace unit and horizontal spiral ductwork inside a clean, insulated mechanical soffit cradle. Clad with vertical Bright White Pro-Rib steel, front return air grille, and a 15/16" drop ceiling grid with foil-faced insulation.  
+*Result*: Chuck and Sharon Miller **separately** loved the render and accepted Change Order CO-02 ($1,850.85) on sight with **zero hesitation and zero questions asked**.
+
+#### View A: The Mechanical Cradle & Finished Cutaway
+| Baseline Jobsite Photo (Before) | GVSM Architectural Cutaway Remodel (After) |
+| :---: | :---: |
+| ![Before HVAC Cradle](images/chuck_miller_soffit/before_hvac_cradle.jpg) | ![GVSM Soffit Cutaway](images/chuck_miller_soffit/gvsm_soffit_cutaway.jpg) |
+| *Suspended 2x4 wooden cradle, horizontal unit heater, spiral duct, ladder, and raw garage framing.* | *Vertical Bright White Pro-Rib steel liner, front return air grille, continuous J-trim, drop ceiling grid, and architectural cutaway section revealing the internal equipment.* |
+
+---
+
+#### View B: Foil-Faced Polyiso & Return Air Mesh (Refined Engineering Variant)
+| GVSM Foil-Faced Polyiso & Return Mesh Variant |
+| :---: |
+| ![Foil Mesh Variant](images/chuck_miller_soffit/gvsm_foil_mesh_soffit.jpg) |
+| *Engineering revision showing 1" foil-faced rigid polyiso panels custom-cut into the 15/16" Classic X grid, with perforated air return mesh for optimal furnace intake CFM.* |
+
+---
+
+### Project 2: Lukaszewski Stairway & Bulkhead Remodel
 *Location*: Residential Interior Stairwell (Sam's Mom's House, Jennifer Lukaszewski)  
 *Objective*: Replace squeaky dark green carpet with solid 2x12 Cedartone treads, and solve a dangerous 5'9" ceiling pinch-point by cutting back the second-floor bulkhead to establish code-compliant 80"+ clear vertical headroom.
 
@@ -50,7 +71,7 @@ All examples below were generated from real-world field photographs taken on sit
 
 ---
 
-### Project 2: Madden’s Patio Workshop & Scrapper Canopy
+### Project 3: Madden’s Patio Workshop & Scrapper Canopy
 *Location*: Exterior Stamped Concrete Patio  
 *Objective*: 18-year-old scrapper Madden needed a winter outdoor workspace. The family proposed an un-engineered, freestanding single-pitch roof attached to a 6-foot wooden privacy fence. GVSM was deployed as a **persuasive forensic truth-teller** to visualize the client's concept, prove its structural failure modes, and present engineered alternatives.
 
@@ -169,6 +190,10 @@ GVSM is never deployed as an isolated image. In production proposals and buildin
 
 ```
 ├── images/
+│   ├── chuck_miller_soffit/
+│   │   ├── before_hvac_cradle.jpg
+│   │   ├── gvsm_soffit_cutaway.jpg
+│   │   └── gvsm_foil_mesh_soffit.jpg
 │   ├── lukaszewski_stairs/
 │   │   ├── before_hallway.jpg
 │   │   ├── gvsm_remodel.jpg
