@@ -316,6 +316,7 @@
       <button class="tab-btn" onclick="switchProject('stairs')">Client Stairs</button>
       <button class="tab-btn" onclick="switchProject('patio')">Client Patio Canopy</button>
       <button class="tab-btn" onclick="switchProject('chimney')">Client Roof Chimney</button>
+      <button class="tab-btn" onclick="switchProject('landing')">Client Deck Landing</button>
     </div>
   </header>
 
@@ -586,6 +587,108 @@
           <rect x="430" y="70" width="240" height="45" fill="#1e293b" stroke="#22c55e" stroke-width="1" rx="4" />
           <text x="440" y="88" fill="#4ade80" font-size="10" font-weight="bold">WISCONSIN SPS 321.28 COMPLIANT</text>
           <text x="440" y="103" class="cad-text">Height &gt; 3ft above roof penetration</text>
+        </svg>`
+      },
+      landing: {
+        title: "Client Residence \u2022 Standalone Deck Landing & Stairs",
+        desc: "Precision 47-3/4\" \u00d7 48\" AC2 CedarTone 2x6 standalone platform on Simpson ABU44 post bases with straight-line egress stair run.",
+        dim: '47-3/4" W \u00d7 48" D \u2022 3-STEP STAIRS',
+        before: "images/client_landing/before_landing.jpg",
+        after: "images/client_landing/gvsm_landing_cutaway.jpg",
+        layers: [
+          { tag: "[SUBSTRATE GROUNDING]", text: "Maintain authentic beige vinyl siding, maroon entry door, foundation, and poured concrete walkway pad exactly as photographed without alteration." },
+          { tag: "[CLADDING & PROFILES]", text: "Standalone 47-3/4\" wide by 48\" deep landing platform framed with AC2 CedarTone 2x6 treated lumber, elevated on plumb 4x4 CedarTone posts set in Simpson Strong-Tie ABU44 galvanized post bases mechanically anchored to concrete pad." },
+          { tag: "[FINISH ASSEMBLIES]", text: "Full 2x6 CedarTone deck boards sitting dead-flush with outside rims. Outside-mounted 4x4 railing posts with 2x4 sub-rails, vertical 2x2 balusters (<4\" gap), and signature continuous flat 2x6 drink-rail top cap. Aluminum Z-flashing and solid PVC sill trim beneath threshold." },
+          { tag: "[ARCHITECTURAL CUTAWAY]", text: "Decking peels back to reveal internal 16\" o.c. 2x6 joists flush with cap and side rims, supported by Simpson Strong-Tie Z-Max joist hangers and GRK structural lags." },
+          { tag: "[MACRO DETAIL INSET]", text: "Zoom inset circle at corner joint showing 1:1 cross-section of flush deck-to-rim joint, through-bolted 4x4 post, and Simpson ABU44 anchor into poured concrete." }
+        ],
+        svg: `<svg viewBox="0 0 740 230" width="100%" height="340" xmlns="http://www.w3.org/2000/svg" style="background: #090d16; border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">
+          <defs>
+            <marker id="arr-landing" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#38bdf8"/>
+            </marker>
+            <marker id="arr-amber-landing" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#fbbf24"/>
+            </marker>
+          </defs>
+          <rect x="5" y="5" width="730" height="220" fill="none" stroke="#1e293b" stroke-width="1"/>
+          <line x1="365" y1="5" x2="365" y2="225" stroke="#1e293b" stroke-width="1" stroke-dasharray="2,2"/>
+          <!-- LEFT SIDE: PLAN VIEW -->
+          <text x="15" y="20" fill="#38bdf8" font-size="8.5" font-weight="700">VIEW A-A: PLAN VIEW &bull; 4'x4' LANDING + STAIRS</text>
+          <!-- House Wall -->
+          <rect x="15" y="38" width="10" height="110" fill="#334155" stroke="#475569"/>
+          <text x="22" y="93" fill="#94a3b8" font-size="7" transform="rotate(-90 22 93)">WALL</text>
+          <!-- Landing Box -->
+          <rect x="25" y="38" width="110" height="110" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+          <text x="35" y="58" fill="#f8fafc" font-size="8" font-weight="700">4'x4' LANDING</text>
+          <text x="35" y="70" fill="#38bdf8" font-size="7">Full 2x6 Decking (47-3/4"x48")</text>
+          <line x1="52" y1="38" x2="52" y2="148" stroke="#334155" stroke-dasharray="2,2"/>
+          <line x1="80" y1="38" x2="80" y2="148" stroke="#334155" stroke-dasharray="2,2"/>
+          <line x1="108" y1="38" x2="108" y2="148" stroke="#334155" stroke-dasharray="2,2"/>
+          <!-- Stairs (3 Steps) -->
+          <rect x="135" y="46" width="25" height="94" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+          <rect x="160" y="46" width="25" height="94" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+          <rect x="185" y="46" width="25" height="94" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+          <text x="143" y="93" fill="#94a3b8" font-size="6.5" transform="rotate(90 143 93)">Double 2x6</text>
+          <text x="168" y="93" fill="#94a3b8" font-size="6.5" transform="rotate(90 168 93)">Double 2x6</text>
+          <text x="193" y="93" fill="#94a3b8" font-size="6.5" transform="rotate(90 193 93)">Double 2x6</text>
+          <!-- Posts in Simpson Bases -->
+          <rect x="23" y="36" width="8" height="8" fill="#38bdf8"/>
+          <rect x="23" y="142" width="8" height="8" fill="#38bdf8"/>
+          <rect x="131" y="36" width="8" height="8" fill="#38bdf8"/>
+          <rect x="131" y="142" width="8" height="8" fill="#38bdf8"/>
+          <rect x="206" y="44" width="8" height="8" fill="#fbbf24"/>
+          <rect x="206" y="134" width="8" height="8" fill="#fbbf24"/>
+          <!-- Plan Dimensions -->
+          <line x1="25" y1="30" x2="135" y2="30" stroke="#38bdf8" stroke-width="0.8" marker-start="url(#arr-landing)" marker-end="url(#arr-landing)"/>
+          <text x="80" y="26" fill="#38bdf8" font-size="7" text-anchor="middle" font-weight="700">47-3/4" LANDING</text>
+          <line x1="135" y1="30" x2="210" y2="30" stroke="#fbbf24" stroke-width="0.8" marker-start="url(#arr-amber-landing)" marker-end="url(#arr-amber-landing)"/>
+          <text x="172" y="26" fill="#fbbf24" font-size="7" text-anchor="middle" font-weight="700">33" STAIR RUN</text>
+          <!-- Plan Callout Notes -->
+          <rect x="15" y="156" width="335" height="60" fill="#1e293b" rx="3" stroke="#334155"/>
+          <text x="22" y="170" fill="#38bdf8" font-size="7" font-weight="700">PLAN SPECIFICATIONS (STANDALONE 8820 SYSTEM):</text>
+          <text x="22" y="182" fill="#f8fafc" font-size="6.5">&bull; Standalone 47-3/4"x48" AC2 Ground Contact 2x6 frame @ 16" o.c.</text>
+          <text x="22" y="194" fill="#fbbf24" font-size="6.5">&bull; 100% straight egress &mdash; zero railing across walking path.</text>
+          <text x="22" y="206" fill="#cbd5e1" font-size="6.5">&bull; Guardrails and stair handrails strictly flank left and right perimeters.</text>
+          <!-- RIGHT SIDE: ELEVATION VIEW -->
+          <text x="380" y="20" fill="#38bdf8" font-size="8.5" font-weight="700">VIEW B-B: ELEVATION &bull; CONCRETE ANCHORING PROFILE</text>
+          <rect x="380" y="135" width="345" height="18" fill="#334155" stroke="#475569"/>
+          <text x="630" y="148" fill="#cbd5e1" font-size="6.5" font-weight="700">SOLID CONCRETE PAD</text>
+          <!-- Post Bases -->
+          <rect x="405" y="127" width="10" height="8" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.8"/>
+          <circle cx="410" cy="131" r="1.5" fill="#0f172a"/>
+          <rect x="485" y="127" width="10" height="8" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.8"/>
+          <circle cx="490" cy="131" r="1.5" fill="#0f172a"/>
+          <rect x="555" y="127" width="10" height="8" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.8"/>
+          <circle cx="560" cy="131" r="1.5" fill="#0f172a"/>
+          <!-- Landing Structure -->
+          <rect x="408" y="85" width="4" height="42" fill="#38bdf8"/>
+          <rect x="488" y="85" width="4" height="42" fill="#38bdf8"/>
+          <rect x="395" y="85" width="100" height="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+          <rect x="395" y="78" width="100" height="7" fill="#b45309" stroke="#d97706"/>
+          <text x="445" y="74" fill="#38bdf8" font-size="7" text-anchor="middle" font-weight="700">4'x4' LANDING (2x6 SOLID)</text>
+          <!-- Steps 1, 2, 3 -->
+          <rect x="495" y="97" width="24" height="38" fill="#1e293b" stroke="#fbbf24"/>
+          <rect x="495" y="95" width="25" height="6" fill="#b45309"/>
+          <text x="507" y="91" fill="#fbbf24" font-size="6" text-anchor="middle">Step 1</text>
+          <rect x="519" y="110" width="24" height="25" fill="#1e293b" stroke="#fbbf24"/>
+          <rect x="519" y="108" width="25" height="6" fill="#b45309"/>
+          <text x="531" y="104" fill="#fbbf24" font-size="6" text-anchor="middle">Step 2</text>
+          <rect x="543" y="122" width="24" height="13" fill="#1e293b" stroke="#fbbf24"/>
+          <rect x="543" y="120" width="25" height="6" fill="#b45309"/>
+          <text x="555" y="116" fill="#fbbf24" font-size="6" text-anchor="middle">Step 3</text>
+          <!-- Guardrails & Drink Rail -->
+          <rect x="396" y="40" width="4" height="45" fill="#38bdf8"/>
+          <rect x="489" y="40" width="4" height="45" fill="#38bdf8"/>
+          <rect x="394" y="37" width="100" height="4" fill="#38bdf8"/>
+          <rect x="558" y="78" width="4" height="49" fill="#fbbf24"/>
+          <line x1="492" y1="39" x2="560" y2="78" stroke="#fbbf24" stroke-width="4"/>
+          <!-- Detail Inset -->
+          <circle cx="675" cy="72" r="30" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="675" y="52" fill="#38bdf8" font-size="6.5" font-weight="700" text-anchor="middle">DRINK RAIL CAP</text>
+          <rect x="655" y="60" width="40" height="8" fill="#f59e0b" stroke="#ffffff" stroke-width="0.8"/>
+          <rect x="669" y="68" width="12" height="20" fill="#b45309" stroke="#ffffff" stroke-width="0.8"/>
+          <text x="675" y="97" fill="#cbd5e1" font-size="5.5" text-anchor="middle">Full 2x6 Flat Over 4x4</text>
         </svg>`
       }
     };
