@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 240" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="tech-bg" cx="18%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0c131c"/>
+      <stop offset="100%" stop-color="#05070a"/>
+    </radialGradient>
+
+    <!-- Emerald Ground Truth Gradient -->
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="60%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+
+    <!-- Cyan CAD Wireframe Gradient -->
+    <linearGradient id="cyan-wire" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+
+    <!-- Titanium Metal -->
+    <linearGradient id="ti-solid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <!-- Subtle Optical Glow -->
+    <filter id="laser-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#10b981" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background Plate -->
+  <rect width="760" height="240" fill="url(#tech-bg)" rx="12"/>
+  <rect width="760" height="240" fill="none" stroke="#172331" stroke-width="1.5" rx="12"/>
+
+  <!-- ======================================================== -->
+  <!-- 1. THE SPATIAL RETICLE: 6-DoF PERSPECTIVE CAMERA FRUSTUM -->
+  <!-- ======================================================== -->
+  <g id="camera-frustum" transform="translate(105, 120)">
+    
+    <!-- Vanishing Perspective Substrate Grid (Ground Plane) -->
+    <!-- Perspective Quad: Top-Left(-65, -45), Top-Right(65, -45), Bot-Right(95, 55), Bot-Left(-95, 55) -->
+    <polygon points="-65,-45 65,-45 95,55 -95,55" 
+      fill="#080e16" 
+      stroke="#1e293b" 
+      stroke-width="1.5"/>
+
+    <!-- Perspective Grid Lines Receding to Vanishing Point (0, -110) -->
+    <line x1="-32" y1="-45" x2="-47" y2="55" stroke="#1e293b" stroke-width="1"/>
+    <line x1="0" y1="-45" x2="0" y2="55" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="32" y1="-45" x2="47" y2="55" stroke="#1e293b" stroke-width="1"/>
+
+    <!-- Horizontal Substrate Rake Lines -->
+    <line x1="-72" y1="-20" x2="72" y2="-20" stroke="#1e293b" stroke-width="1"/>
+    <line x1="-82" y1="12" x2="82" y2="12" stroke="#1e293b" stroke-width="1"/>
+
+    <!-- LEFT HALF: Deterministic CAD Wireframe Layer -->
+    <polygon points="-65,-45 0,-45 0,55 -95,55" 
+      fill="rgba(56, 189, 248, 0.04)" 
+      stroke="url(#cyan-wire)" 
+      stroke-width="2.5"/>
+    <!-- Wireframe 16" O.C. Stud Line -->
+    <line x1="-48" y1="-45" x2="-70" y2="55" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,3"/>
+
+    <!-- RIGHT HALF: Solid Synthesized Trade Reality (Cutaway Surface) -->
+    <polygon points="0,-45 65,-45 95,55 0,55" 
+      fill="url(#emerald-grad)" 
+      stroke="#10b981" 
+      stroke-width="2.5" 
+      filter="url(#laser-glow)"/>
+
+    <!-- 45-degree Spatial Cutaway Knife Line (The Exact GVSM Boundary) -->
+    <line x1="0" y1="-58" x2="0" y2="68" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Central 3D Coordinate Axis Tripod (X, Y, Z / PnP Orientation) -->
+    <!-- Z Axis (Up / Plumb) -->
+    <line x1="0" y1="0" x2="0" y2="-32" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
+    <polygon points="0,-36 -3,-28 3,-28" fill="#34d399"/>
+    <!-- X Axis (Right / Lateral) -->
+    <line x1="0" y1="0" x2="28" y2="12" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+    <polygon points="32,14 23,8 26,17" fill="#38bdf8"/>
+    <!-- Y Axis (Depth / Focal) -->
+    <line x1="0" y1="0" x2="-24" y2="10" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Central Optical Sight Dot -->
+    <circle cx="0" cy="0" r="4.5" fill="#05070a" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="0" cy="0" r="1.5" fill="#10b981"/>
+
+    <!-- 4 CORNER GEOPIN TRACKING RETICLES ([+]) -->
+    <!-- Top-Left Pin -->
+    <g transform="translate(-65, -45)">
+      <path d="M -8 -3 H -8 -8 V -8 -3 M 8 -3 H 8 8 V -8 -3 M -8 3 H -8 -8 V 8 3 M 8 3 H 8 8 V 8 3" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="2" fill="#38bdf8"/>
+    </g>
+    <!-- Top-Right Pin -->
+    <g transform="translate(65, -45)">
+      <path d="M -8 -3 H -8 -8 V -8 -3 M 8 -3 H 8 8 V -8 -3 M -8 3 H -8 -8 V 8 3 M 8 3 H 8 8 V 8 3" fill="none" stroke="#10b981" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="2" fill="#10b981"/>
+    </g>
+    <!-- Bottom-Right Pin -->
+    <g transform="translate(95, 55)">
+      <path d="M -8 -3 H -8 -8 V -8 -3 M 8 -3 H 8 8 V -8 -3 M -8 3 H -8 -8 V 8 3 M 8 3 H 8 8 V 8 3" fill="none" stroke="#10b981" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="2" fill="#10b981"/>
+    </g>
+    <!-- Bottom-Left Pin -->
+    <g transform="translate(-95, 55)">
+      <path d="M -8 -3 H -8 -8 V -8 -3 M 8 -3 H 8 8 V -8 -3 M -8 3 H -8 -8 V 8 3 M 8 3 H 8 8 V 8 3" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="2" fill="#38bdf8"/>
+    </g>
+
+    <!-- Outer Viewfinder Corner Crop Marks -->
+    <path d="M -115 -60 H -105 V -70 M 115 -60 H 105 V -70 M -115 70 H -105 V 80 M 115 70 H 105 V 80" 
+      fill="none" stroke="#334155" stroke-width="1.5"/>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- 2. TYPOGRAPHY: TIGHT, TECHNICAL ARCHITECTURAL MONOGRAM   -->
+  <!-- ======================================================== -->
+  <g id="typography" transform="translate(250, 48)">
+    
+    <!-- Primary Technical Monogram: G V S M -->
+    <g id="letters" transform="translate(0, 72)">
+      <!-- G -->
+      <text x="0" y="0" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Chakra Petch', Roboto, sans-serif" 
+        font-size="88" 
+        font-weight="900" 
+        letter-spacing="-1px" 
+        fill="url(#ti-solid)">G</text>
+
+      <!-- V (The Perspective Apex - Emerald Accent) -->
+      <text x="76" y="0" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Chakra Petch', Roboto, sans-serif" 
+        font-size="88" 
+        font-weight="900" 
+        letter-spacing="-1px" 
+        fill="url(#emerald-grad)">V</text>
+
+      <!-- S -->
+      <text x="146" y="0" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Chakra Petch', Roboto, sans-serif" 
+        font-size="88" 
+        font-weight="900" 
+        letter-spacing="-1px" 
+        fill="url(#ti-solid)">S</text>
+
+      <!-- M -->
+      <text x="216" y="0" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Chakra Petch', Roboto, sans-serif" 
+        font-size="88" 
+        font-weight="900" 
+        letter-spacing="-1px" 
+        fill="url(#ti-solid)">M</text>
+
+      <!-- Precision Optical Telemetry Tag -->
+      <g transform="translate(325, -55)">
+        <rect x="0" y="0" width="148" height="25" rx="4" fill="#091814" stroke="#10b981" stroke-width="1.2"/>
+        <!-- Flashing Optical Sensor Dot -->
+        <circle cx="12" cy="12.5" r="3.5" fill="#34d399"/>
+        <text x="24" y="16.5" 
+          font-family="monospace" 
+          font-size="9.5" 
+          font-weight="700" 
+          letter-spacing="1px" 
+          fill="#34d399">PnP CAMERA PINNED</text>
+      </g>
+    </g>
+
+    <!-- Sub-Headline: GROUNDED VISUAL SITE MODELING -->
+    <text x="2" y="104" 
+      font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" 
+      font-size="15" 
+      font-weight="800" 
+      letter-spacing="3.2px" 
+      fill="#f8fafc" 
+      text-transform="uppercase">Grounded Visual Site Modeling</text>
+
+    <!-- Technical Dimension Datum Bar -->
+    <g transform="translate(2, 118)">
+      <line x1="0" y1="0" x2="475" y2="0" stroke="#1e293b" stroke-width="1.5"/>
+      <line x1="0" y1="0" x2="185" y2="0" stroke="url(#cyan-wire)" stroke-width="2"/>
+      <line x1="185" y1="0" x2="320" y2="0" stroke="url(#emerald-grad)" stroke-width="2"/>
+      <!-- Calibration Tick Marks -->
+      <line x1="0" y1="-3" x2="0" y2="3" stroke="#38bdf8" stroke-width="1.5"/>
+      <line x1="185" y1="-3" x2="185" y2="3" stroke="#ffffff" stroke-width="2"/>
+      <line x1="320" y1="-3" x2="320" y2="3" stroke="#10b981" stroke-width="1.5"/>
+      <line x1="475" y1="-3" x2="475" y2="3" stroke="#64748b" stroke-width="1.5"/>
+    </g>
+
+    <!-- Technical System Specifications -->
+    <text x="2" y="142" 
+      font-family="monospace" 
+      font-size="10.5" 
+      font-weight="600" 
+      letter-spacing="1px" 
+      fill="#64748b">
+      6-DoF SUBSTRATE SOLVER &bull; DUAL-DELIVERABLE CAD &bull; DGC
+    </text>
+  </g>
+</svg>
