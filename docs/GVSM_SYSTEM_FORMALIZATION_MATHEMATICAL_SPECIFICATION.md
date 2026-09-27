@@ -302,3 +302,46 @@ The GVSM system is validated via automated integration suites verifying both spa
 3. `TestCADGenerator`: SVG coordinate accuracy, headroom rake angle calculation, dimension string integrity.
 4. `TestDGCCoreFour`: Menards BOM calculation, 15% material markup, $80/hr labor rate, $350+/day profit floor.
 5. `TestSpatialInvariants`: Reprojection error $< 1.2\text{ px}$, planar orthogonality $< 0.5^\circ$, scale closure $< 1.5\%$.
+6. `TestGVSMWatermark`: 2D-DCT orthogonal inverse precision, 64-bit payload preservation, majority-voting bit recovery, SVG XML namespace signing, and SHA-256 Merkle Provenance Manifest verification.
+
+---
+
+## 9. Tri-Layer Forensic Watermark & Merkle Provenance Specification
+
+To prevent technological expropriation and guarantee non-repudiation of GVSM assets, every deliverable is stamped with an immutable, multi-domain provenance signature:
+
+```
++--------------------------------------------------------------------------------------------------+
+| LAYER 1: SOVEREIGN GEODETIC COLLAR & THEODOLITE RETICLE (Visible Framing Layer)                 |
+| Outer calibration collar burned into border: Datum coordinates (Wisconsin Rapids, WI),           |
+| contractor identity (John Dondlinger / DGC), ZLA license, Job ID, and SHA-256 signature prefix. |
+| Four-corner theodolite crosshair reticles tie directly into structural vanishing axes.           |
++--------------------------------------------------------------------------------------------------+
+| LAYER 2: 2D-DCT MID-FREQUENCY SPREAD-SPECTRUM STEGANOGRAPHY (Invisible Frequency Layer)         |
+| Luminance Y channel transformed via 8x8 2D-DCT. 64-bit cryptographic payload ('GVSM' + HMAC-32)  |
+| modulated across mid-frequency pairs (3,2) and (2,3). Tiled redundantly across hundreds of       |
+| pseudo-random blocks. Survives JPEG 60% recompression, web downsampling, screenshots, inpainting.|
++--------------------------------------------------------------------------------------------------+
+| LAYER 3: DUAL-DELIVERABLE CRYPTOGRAPHIC MERKLE HASH BINDING (Proof of Possession Layer)         |
+| Merkle root binds the visual cutaway render to: (1) raw substrate on-site camera frame,         |
+| (2) deterministic inline SVG CAD blueprint, (3) carpenter cut schedule, (4) Menards BOM.        |
+| An attacker possessing only the image CANNOT fabricate the matching offline engineering bundle. |
++--------------------------------------------------------------------------------------------------+
+| LAYER 4: DETERMINISTIC SVG CAD EMBEDDED BENCHMARK & XML NAMESPACE (Vector Layer)                 |
+| Geodetic survey medallion embedded in SVG with xmlns:gvsm attributes, legal statutory citations  |
+| (17 U.S.C. § 1202 - Criminalization of Copyright Management Information removal/tampering).     |
++--------------------------------------------------------------------------------------------------+
+```
+
+### 9.1 Mathematical Formulation of 2D-DCT Watermark Modulation
+For an $8 \times 8$ spatial luminance block $B(x, y)$, the 2D-DCT is defined as:
+$$D(u, v) = \frac{1}{4} C(u) C(v) \sum_{x=0}^7 \sum_{y=0}^7 B(x, y) \cos\left[\frac{(2x+1)u\pi}{16}\right] \cos\left[\frac{(2y+1)v\pi}{16}\right]$$
+where $C(w) = \frac{1}{\sqrt{2}}$ for $w=0$, and $1$ for $w > 0$.
+
+For bit $b_k \in \{0, 1\}$ at sequence index $k$:
+- If $b_k = 1$: modulate coefficients such that $D(3, 2) - D(2, 3) \ge \Delta$
+- If $b_k = 0$: modulate coefficients such that $D(2, 3) - D(3, 2) \ge \Delta$
+where $\Delta = 28.0$ represents the robust watermark embedding strength.
+
+Inverse DCT (2D-IDCT) reconstructs the spatial domain with bounded luminance drift $|\delta Y| \le 3.5\text{ IRE}$, imperceptible to the human eye but statistically recoverable via majority-voting over $N_{\text{blocks}} \ge 256$.
+

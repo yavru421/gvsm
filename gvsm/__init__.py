@@ -6,8 +6,9 @@ Anchored directly to physical jobsite substrate.
 """
 
 from .compiler import GVSMCompiler, PromptSpec
-from .cad import CADGenerator, StairSpec, SoffitSpec, LandingSpec
+from .cad import CADGenerator, StairSpec, SoffitSpec, LandingSpec, ChimneySpec
 from .validator import GVSMValidator, ValidationError
+from .watermark import GVSMWatermarker
 from .pipeline import GVSMPipeline
 
 __version__ = "1.0.0"
@@ -18,7 +19,9 @@ __all__ = [
     "StairSpec",
     "SoffitSpec",
     "LandingSpec",
+    "ChimneySpec",
     "GVSMValidator",
     "ValidationError",
+    "GVSMWatermarker",
     "GVSMPipeline",
 ]

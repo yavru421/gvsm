@@ -1,0 +1,17 @@
+{
+  "format": "GVSM-PROVENANCE-v1.0",
+  "job_id": "LUKASZEWSKI_BASEMENT_STAIRS",
+  "timestamp_iso": "2026-09-27T16:04:45Z",
+  "geodetic_origin": "44\u00b023'36\"N, 89\u00b049'23\"W (Wisconsin Rapids, WI)",
+  "operator": "John Dondlinger (Dondlinger General Contracting)",
+  "license": "Zero-Liability Architecture (ZLA) Proprietary Field Protocol",
+  "hashes": {
+    "cutaway_render": "645594601021f69c2087c8777e3b68915c2866074250efcfe8cdbb255bc7f297",
+    "substrate_photo": "ef0c5e0f22aa65739d04ac3d899bea50c99b05c90118e0a723265055c73a175d",
+    "cad_svg_blueprint": "NOT_ATTACHED",
+    "lead_carpenter_cut_schedule": "NOT_ATTACHED",
+    "menards_store_3107_bom": "NOT_ATTACHED"
+  },
+  "merkle_root": "84ed5c708f914b34654a5a63decbd6b60de9cee4efee4c45d18c88e76ccb895f",
+  "signature_hmac": "5b54f6ae4441a8b70122e18b56de833ec2319fd3876589285cb5ef72632d6ec4"
+}

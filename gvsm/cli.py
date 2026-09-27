@@ -55,7 +55,20 @@ def main():
     val_parser.add_argument("--photo", required=True, help="Path to photo")
     val_parser.add_argument("--memo", default="", help="Optional memo string to check for multi-element mismatches")
 
-    # 6. Serve Command
+    # 6. Watermark Command (Tri-Layer Protection)
+    wm_parser = subparsers.add_parser("watermark", help="Apply Tri-Layer Watermark (Geodetic Collar + Invisible 2D-DCT + Merkle Provenance)")
+    wm_parser.add_argument("--input", required=True, help="Path to input image to watermark")
+    wm_parser.add_argument("--out", required=True, help="Path to save watermarked image")
+    wm_parser.add_argument("--job", default="GVSM_JOB", help="Job identifier or client code")
+    wm_parser.add_argument("--no-collar", action="store_true", help="Omit outer geodetic calibration collar")
+    wm_parser.add_argument("--no-dct", action="store_true", help="Omit invisible frequency DCT steganography")
+
+    # 7. Verify Command (Forensic Watermark & Provenance Extraction)
+    ver_parser = subparsers.add_parser("verify", help="Forensically verify GVSM watermark, DCT bits, and Merkle provenance")
+    ver_parser.add_argument("--input", required=True, help="Path to image to verify")
+    ver_parser.add_argument("--job", default="GVSM_JOB", help="Expected Job identifier")
+
+    # 8. Serve Command
     serve_parser = subparsers.add_parser("serve", help="Launch interactive before/after split-curtain comparison viewer")
     serve_parser.add_argument("--port", type=int, default=8080, help="Local HTTP port")
 
@@ -150,6 +163,45 @@ def main():
         except ValidationError as e:
             print(f"[VALIDATION FAILED]: {e}", file=sys.stderr)
             sys.exit(1)
+
+
+    elif args.command == "watermark":
+        from .watermark import GVSMWatermarker
+        wm = GVSMWatermarker()
+        res = wm.apply_watermark_to_file(
+            input_path=args.input,
+            output_path=args.out,
+            job_id=args.job,
+            add_visible_collar=not args.no_collar,
+            add_dct_steganography=not args.no_dct
+        )
+        print("\n" + "="*80)
+        print("GVSM TRI-LAYER WATERMARK RECEIPT")
+        print("="*80)
+        print(f"Input:        {args.input}")
+        print(f"Output Image: {res.get('output_image', args.out)}")
+        print(f"Job ID:       {res.get('job_id', args.job)}")
+        print(f"Signature:    {res.get('signature', 'GENERATED')}")
+        print(f"Merkle Root:  {res.get('merkle_root', 'COMPUTED')}")
+        print(f"Provenance:   {res.get('provenance_path', 'SAVED')}")
+        print("="*80 + "\n")
+
+
+    elif args.command == "verify":
+        from .watermark import GVSMWatermarker
+        wm = GVSMWatermarker()
+        ver = wm.verify_image(args.input, args.job)
+        print("\n" + "="*80)
+        print("GVSM FORENSIC PROVENANCE VERIFICATION")
+        print("="*80)
+        print(f"Target Image:      {ver['image_path']}")
+        print(f"Target Job ID:     {ver['job_id']}")
+        print(f"DCT Bit Verified:  {ver['dct_watermark_verified']}")
+        print(f"Bit Confidence:    {ver['dct_bit_confidence'] * 100:.1f}%")
+        print(f"Recovered Payload: {ver['recovered_payload_hex']}")
+        print(f"Provenance JSON:   {ver['has_provenance_file']}")
+        print(f"Forensic Status:   {ver['forensic_status']}")
+        print("="*80 + "\n")
 
 
     elif args.command == "serve":

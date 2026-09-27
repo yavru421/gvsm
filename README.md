@@ -222,13 +222,23 @@ gvsm bom --type stairs --hours 16.0 --days 2.0 --out menards_stair_bom.json
 # 5. Pre-flight check photo and memo for GVSM invariants (anti-refeed, scope mismatches)
 gvsm validate --photo images/lukaszewski_stairs/before_descent.jpg --memo "Build 11-riser staircase"
 
-# 6. Launch the interactive split-curtain comparison viewer
+# 6. Apply Tri-Layer Forensic Watermark (Geodetic Collar + 2D-DCT Steganography + Merkle Provenance)
+gvsm watermark --input images/chuck_miller_soffit/gvsm_soffit_cutaway.jpg \
+               --out images/chuck_miller_soffit/gvsm_soffit_cutaway_watermarked.jpg \
+               --job CHUCK_MILLER_SOFFIT
+
+# 7. Forensically verify image authenticity and extract 2D-DCT frequency watermark payload
+gvsm verify --input images/chuck_miller_soffit/gvsm_soffit_cutaway_watermarked.jpg \
+            --job CHUCK_MILLER_SOFFIT
+
+# 8. Launch the interactive split-curtain comparison viewer
 gvsm serve --port 8080
 ```
 
 ### Running Tests
 ```bash
 python -m unittest tests/test_compiler.py
+python -m unittest tests/test_watermark.py
 ```
 
 ---

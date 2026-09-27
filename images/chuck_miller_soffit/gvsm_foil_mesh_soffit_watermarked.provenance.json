@@ -1,0 +1,17 @@
+{
+  "format": "GVSM-PROVENANCE-v1.0",
+  "job_id": "CHUCK_MILLER_HVAC_SOFFIT",
+  "timestamp_iso": "2026-09-27T16:04:36Z",
+  "geodetic_origin": "44\u00b023'36\"N, 89\u00b049'23\"W (Wisconsin Rapids, WI)",
+  "operator": "John Dondlinger (Dondlinger General Contracting)",
+  "license": "Zero-Liability Architecture (ZLA) Proprietary Field Protocol",
+  "hashes": {
+    "cutaway_render": "0ec5852e947b308364d9ef94b6293e421239ad1a41c51c9591bfc66b240ee2b9",
+    "substrate_photo": "5bce827ae158d8c36975d496e77d396cea6895110dcfcdf80dc57d95f9061416",
+    "cad_svg_blueprint": "NOT_ATTACHED",
+    "lead_carpenter_cut_schedule": "NOT_ATTACHED",
+    "menards_store_3107_bom": "NOT_ATTACHED"
+  },
+  "merkle_root": "80169a8de0e1f10f12c73da0503479a4fa6f67e6b4b6ef75fa1eeec7215a0afe",
+  "signature_hmac": "7c0245628c3a37019ad1c14f6a05dffa639ee5bcc5cb226646f79ca79a337e69"
+}

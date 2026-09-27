@@ -1,0 +1,17 @@
+{
+  "format": "GVSM-PROVENANCE-v1.0",
+  "job_id": "PRAHL_ROOF_CHIMNEY_REBUILD",
+  "timestamp_iso": "2026-09-27T16:05:13Z",
+  "geodetic_origin": "44\u00b023'36\"N, 89\u00b049'23\"W (Wisconsin Rapids, WI)",
+  "operator": "John Dondlinger (Dondlinger General Contracting)",
+  "license": "Zero-Liability Architecture (ZLA) Proprietary Field Protocol",
+  "hashes": {
+    "cutaway_render": "daf74fa5e00c413bef433d85c445658953db12392656c59160c6708a513cc081",
+    "substrate_photo": "6fe908941480af9de1e7afef0fb2088277d21574c355ce565be93be803eefae0",
+    "cad_svg_blueprint": "NOT_ATTACHED",
+    "lead_carpenter_cut_schedule": "NOT_ATTACHED",
+    "menards_store_3107_bom": "NOT_ATTACHED"
+  },
+  "merkle_root": "96573705bf95593810b69dbaa487bf33df72ad511ec483b4fda6587d8cbcc7b9",
+  "signature_hmac": "ceb610f6b4f14a4adeb2ca2bdcb5ae2ac4dba8707d85bc6b6711d0e818926b83"
+}

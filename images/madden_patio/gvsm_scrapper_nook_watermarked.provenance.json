@@ -1,0 +1,17 @@
+{
+  "format": "GVSM-PROVENANCE-v1.0",
+  "job_id": "MADDEN_OUTDOOR_PAVILION",
+  "timestamp_iso": "2026-09-27T16:05:03Z",
+  "geodetic_origin": "44\u00b023'36\"N, 89\u00b049'23\"W (Wisconsin Rapids, WI)",
+  "operator": "John Dondlinger (Dondlinger General Contracting)",
+  "license": "Zero-Liability Architecture (ZLA) Proprietary Field Protocol",
+  "hashes": {
+    "cutaway_render": "9c9512749edc0842b7d448a2972a00034b9f6678daf1a8e1f3e39e7cf04b631b",
+    "substrate_photo": "4524e63c8fc81b827b5df2e0f968fb0498761da2d98b98638461563aeee8fb92",
+    "cad_svg_blueprint": "NOT_ATTACHED",
+    "lead_carpenter_cut_schedule": "NOT_ATTACHED",
+    "menards_store_3107_bom": "NOT_ATTACHED"
+  },
+  "merkle_root": "9d384cc443e62b031f0ebeb1efa462f6931011f57cfa7f8a31188cbe0e922e8f",
+  "signature_hmac": "fb49e5d741727e6ba596d36aa735a4c898f27c2e14b40f7161dbf8e4a6bfbd89"
+}
