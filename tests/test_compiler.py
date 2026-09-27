@@ -14,8 +14,9 @@ import os
 import unittest
 from gvsm.compiler import GVSMCompiler, PromptSpec
 from gvsm.validator import GVSMValidator, ValidationError
-from gvsm.cad import CADGenerator, StairSpec, SoffitSpec
+from gvsm.cad import CADGenerator, StairSpec, SoffitSpec, ChimneySpec
 from gvsm.pipeline import GVSMPipeline
+
 
 
 class TestGVSMCompiler(unittest.TestCase):
@@ -209,7 +210,29 @@ class TestGVSMCompiler(unittest.TestCase):
         self.assertTrue(bom["profit_floor_protected"])
         self.assertGreaterEqual(bom["daily_profit"], 350.00)
 
+    def test_chimney_generation(self):
+        """Verify ChimneySpec SVG elevation, cut schedule, and Menards BOM."""
+        spec = ChimneySpec(width_in=32.0, depth_in=24.0, height_above_roof_in=54.0, soldier_interval_courses=3)
+        svg = CADGenerator.render_chimney_elevation(spec)
+        self.assertTrue(svg.startswith("<svg"))
+        self.assertIn("EXPANDED CHIMNEY ELEVATION", svg)
+        self.assertIn("SOLDIER", svg.upper())
+        self.assertIn("SPS 321.28", svg)
+
+        sched = CADGenerator.generate_cut_schedule(spec)
+        self.assertGreater(len(sched), 4)
+        marks = [s["mark"] for s in sched]
+        self.assertIn("BRK-RUN", marks)
+        self.assertIn("BRK-SLD", marks)
+        self.assertIn("FLUE-01", marks)
+
+        bom = CADGenerator.generate_menards_bom(spec, labor_hours=24.0, duration_days=2.5)
+        self.assertEqual(bom["supplier"], "Menards (Wisconsin Rapids Store #3107)")
+        self.assertTrue(bom["profit_floor_protected"])
+        self.assertGreaterEqual(bom["daily_profit"], 350.00)
+
 
 if __name__ == "__main__":
     unittest.main()
+
 

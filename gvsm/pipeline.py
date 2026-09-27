@@ -11,8 +11,9 @@ Coordinates the complete voice-to-deliverable execution:
 from typing import Dict, Any, List, Optional
 import os
 from .compiler import GVSMCompiler, PromptSpec
-from .cad import CADGenerator, StairSpec, SoffitSpec, LandingSpec
+from .cad import CADGenerator, StairSpec, SoffitSpec, LandingSpec, ChimneySpec
 from .validator import GVSMValidator, ValidationError
+
 
 
 class GVSMPipeline:
@@ -50,13 +51,18 @@ class GVSMPipeline:
         elif scope_type == "soffit" or "hvac" in memo_lower or "cradle" in memo_lower:
             spec = SoffitSpec()
             svg_blueprint = self.cad.render_soffit_cradle_section(spec)
+        elif scope_type == "chimney" or "chimney" in memo_lower or "masonry" in memo_lower or "soldier" in memo_lower:
+            spec = ChimneySpec()
+            svg_blueprint = self.cad.render_chimney_elevation(spec)
         else:
             # Default to stair section if unspecified
             spec = StairSpec()
             svg_blueprint = self.cad.render_stair_cross_section(spec)
 
         cut_schedule = self.cad.generate_cut_schedule(spec)
-        menards_bom = self.cad.generate_menards_bom(spec, labor_hours=16.0, duration_days=2.0)
+        labor_h = 24.0 if isinstance(spec, ChimneySpec) else 16.0
+        dur_d = 2.5 if isinstance(spec, ChimneySpec) else 2.0
+        menards_bom = self.cad.generate_menards_bom(spec, labor_hours=labor_h, duration_days=dur_d)
 
         # Spatial Verification Specifications (Substrate Grounding Invariants)
         spatial_invariants = {

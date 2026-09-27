@@ -13,8 +13,9 @@ import sys
 import os
 import json
 from .compiler import GVSMCompiler
-from .cad import CADGenerator, StairSpec, SoffitSpec
+from .cad import CADGenerator, StairSpec, SoffitSpec, ChimneySpec
 from .validator import GVSMValidator, ValidationError
+
 from .pipeline import GVSMPipeline
 
 
@@ -29,22 +30,22 @@ def main():
     compile_parser = subparsers.add_parser("compile", help="Compile a voice memo and photo into a 5-layer GVSM prompt")
     compile_parser.add_argument("--photo", required=True, help="Path to raw on-site photo")
     compile_parser.add_argument("--memo", required=True, help="Contractor voice memo or field description")
-    compile_parser.add_argument("--scope", choices=["stairs", "soffit", "landing"], default=None, help="Explicit scope type override")
+    compile_parser.add_argument("--scope", choices=["stairs", "soffit", "landing", "chimney"], default=None, help="Explicit scope type override")
     compile_parser.add_argument("--out", default=None, help="Output directory to save bundle artifacts")
 
     # 2. CAD Command
     cad_parser = subparsers.add_parser("cad", help="Generate deterministic inline SVG CAD blueprints")
-    cad_parser.add_argument("--type", choices=["stairs", "soffit"], default="stairs", help="CAD drawing type")
+    cad_parser.add_argument("--type", choices=["stairs", "soffit", "chimney"], default="stairs", help="CAD drawing type")
     cad_parser.add_argument("--out", default="blueprint.svg", help="Output SVG filepath")
 
     # 3. Cut Schedule Command
     sched_parser = subparsers.add_parser("schedule", help="Generate piece-by-piece fabrication cut schedule")
-    sched_parser.add_argument("--type", choices=["stairs", "soffit"], default="stairs", help="Framing spec type")
+    sched_parser.add_argument("--type", choices=["stairs", "soffit", "chimney"], default="stairs", help="Framing spec type")
     sched_parser.add_argument("--out", default=None, help="Output JSON filepath")
 
     # 4. BOM Command
     bom_parser = subparsers.add_parser("bom", help="Generate single-supplier Menards SKU BOM and DGC contract economics")
-    bom_parser.add_argument("--type", choices=["stairs", "soffit"], default="stairs", help="Framing spec type")
+    bom_parser.add_argument("--type", choices=["stairs", "soffit", "chimney"], default="stairs", help="Framing spec type")
     bom_parser.add_argument("--hours", type=float, default=16.0, help="Labor hours ($80/hr calibration)")
     bom_parser.add_argument("--days", type=float, default=2.0, help="Job duration in days ($350+/day profit floor)")
     bom_parser.add_argument("--out", default=None, help="Output JSON filepath")
@@ -92,15 +93,22 @@ def main():
         cad = CADGenerator()
         if args.type == "stairs":
             svg = cad.render_stair_cross_section(StairSpec())
-        else:
+        elif args.type == "soffit":
             svg = cad.render_soffit_cradle_section(SoffitSpec())
+        else:
+            svg = cad.render_chimney_elevation(ChimneySpec())
         with open(args.out, "w", encoding="utf-8") as f:
             f.write(svg)
         print(f"Generated {args.type} blueprint saved to: {args.out}")
 
     elif args.command == "schedule":
         cad = CADGenerator()
-        spec = StairSpec() if args.type == "stairs" else SoffitSpec()
+        if args.type == "stairs":
+            spec = StairSpec()
+        elif args.type == "soffit":
+            spec = SoffitSpec()
+        else:
+            spec = ChimneySpec()
         sched = cad.generate_cut_schedule(spec)
         sched_json = json.dumps(sched, indent=2)
         if args.out:
@@ -112,7 +120,12 @@ def main():
 
     elif args.command == "bom":
         cad = CADGenerator()
-        spec = StairSpec() if args.type == "stairs" else SoffitSpec()
+        if args.type == "stairs":
+            spec = StairSpec()
+        elif args.type == "soffit":
+            spec = SoffitSpec()
+        else:
+            spec = ChimneySpec()
         bom = cad.generate_menards_bom(spec, labor_hours=args.hours, duration_days=args.days)
         bom_json = json.dumps(bom, indent=2)
         if args.out:
@@ -121,6 +134,7 @@ def main():
             print(f"Menards BOM takeoff saved to: {args.out}")
         else:
             print(bom_json)
+
 
     elif args.command == "validate":
         validator = GVSMValidator()

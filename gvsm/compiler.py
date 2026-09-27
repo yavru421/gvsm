@@ -122,6 +122,8 @@ class GVSMCompiler:
             substrate = "Anchor to the exact staircase footprint, wall partitions, and floor openings visible in the reference photo."
         elif "soffit" in lower or "cradle" in lower or "hvac" in lower:
             substrate = "Built directly onto the suspended 2x4 wooden framing cradle and ceiling joists visible in the reference photo."
+        elif "chimney" in lower or "masonry" in lower or "flue" in lower:
+            substrate = "Built directly onto the existing roof opening and brick masonry base visible in the reference photo, extending higher above the roof ridge."
         elif "patio" in lower or "canopy" in lower or "roof" in lower:
             substrate = "Freestanding timber structure anchored on the patio slab bounded between the house wall and perimeter fence."
 
@@ -131,6 +133,8 @@ class GVSMCompiler:
             cladding = self.TRADE_KEYWORDS["prorib"]
         elif "cedar" in lower or "cedartone" in lower or "tread" in lower:
             cladding = self.TRADE_KEYWORDS["cedartone"]
+        elif "chimney" in lower or "soldier" in lower or "brick" in lower:
+            cladding = "expanded footprint red clay facing brick with distinctive soldier courses (bricks standing vertically on end) repeated every three standard running courses"
         elif "timber" in lower or "pavilion" in lower or "post" in lower:
             cladding = "heavy-timber 6x6 pressure-treated posts with diagonal 4x4 structural knee braces and horizontal header beams"
 
@@ -142,6 +146,8 @@ class GVSMCompiler:
             finish = self.TRADE_KEYWORDS["polycarbonate"]
         elif "drop ceiling" in lower or "grid" in lower or "tile" in lower or "pvc" in lower:
             finish = self.TRADE_KEYWORDS["drop_grid"]
+        elif "chimney" in lower or "flue" in lower or "crown" in lower:
+            finish = "overhanging cast-in-place reinforced concrete wash crown with drip edge, 8x12 vitrified clay flue liner, and continuous 26-gauge reglet-cut counter flashing with step flashing along roof pitch"
         elif "riser" in lower or "stair" in lower:
             finish = "satin white solid risers, matching side skirts scribed tight to walls, and craftsman handrail"
 
@@ -152,8 +158,11 @@ class GVSMCompiler:
                 cutaway = "Peel back drywall along the right mid-flight partition to reveal triple 2x12 cut stringers, heavy subfloor adhesive bedding, and Tapcon-anchored AC2 treated kicker plate on the slab."
             elif "hvac" in lower or "furnace" in lower or "duct" in lower or "soffit" in lower:
                 cutaway = "A clean diagonal 45-degree cutaway on the front face peels back the steel liner to reveal the horizontal furnace unit, spiral supply ductwork, and electrical rough-ins inside the cradle."
+            elif "chimney" in lower or "flashing" in lower:
+                cutaway = "Peeled-back roof intersection cutaway revealing 26-gauge step flashing interwoven with each shingle course, self-adhering ice-and-water underlayment, and structural cricket saddle."
             elif "header" in lower or "headroom" in lower:
                 cutaway = "Upper ceiling bulkhead cutaway exposes the double 2x10 SPF header with Simpson Strong-Tie face-mount joist hangers creating 80-inch clear vertical headroom."
+
 
         # 6. Detect Macro Inset
         macro_inset = None

@@ -40,7 +40,20 @@ class LandingSpec:
     post_stock: str = "4x4 AC2 Ground Contact"
 
 
+@dataclass
+class ChimneySpec:
+    width_in: float = 32.0               # Expanded chimney width across roof ridge
+    depth_in: float = 24.0               # Expanded chimney depth down roof pitch
+    height_above_roof_in: float = 54.0   # Taller chimney (> 3 ft above roof per SPS 321.28)
+    soldier_interval_courses: int = 3   # Soldier course every three running courses
+    brick_stock: str = "Standard Modular Red Clay Facing Brick (2-1/4\" x 3-5/8\" x 7-5/8\")"
+    flue_stock: str = "8\" x 12\" Vitrified Clay Flue Liner"
+    crown_stock: str = "Reinforced Cast-in-Place Concrete Crown with Drip Edge"
+    flashing_stock: str = "26-gauge Pre-painted Steel Step & Counter Flashing"
+
+
 class CADGenerator:
+
     """
     Renders clean, architectural SVG vector blueprints embedded directly into
     proposals, work orders, and HTML deliverables.
@@ -144,12 +157,99 @@ class CADGenerator:
         return svg
 
     @staticmethod
+    def render_chimney_elevation(spec: ChimneySpec) -> str:
+        """Generates an SVG architectural elevation of an expanded brick chimney with repeating soldier courses."""
+        svg_w, svg_h = 700, 600
+        scale = 5.0  # px per inch
+        cw = spec.width_in * scale
+        ch = spec.height_above_roof_in * scale
+        ox = (svg_w - cw) / 2
+        oy = 100
+
+        # Calculate courses
+        course_h = 2.75 * scale  # 2-3/4" brick course height with mortar
+        total_courses = max(4, int(ch / course_h))
+
+        brick_svg_lines = []
+        for c in range(total_courses):
+            cy = oy + ch - (c + 1) * course_h
+            is_soldier = ((c + 1) % (spec.soldier_interval_courses + 1) == 0)
+            if is_soldier:
+                # Soldier course (vertical bricks)
+                brick_svg_lines.append(
+                    f'<rect x="{ox}" y="{cy}" width="{cw}" height="{course_h}" fill="#b91c1c" stroke="#fca5a5" stroke-width="1.5" />'
+                )
+                # Vertical soldier brick divisions
+                soldier_w = 2.75 * scale
+                soldier_count = int(cw / soldier_w)
+                for s in range(1, soldier_count):
+                    sx = ox + s * soldier_w
+                    brick_svg_lines.append(
+                        f'<line x1="{sx}" y1="{cy}" x2="{sx}" y2="{cy + course_h}" stroke="#7f1d1d" stroke-width="1" />'
+                    )
+            else:
+                # Standard running course
+                brick_svg_lines.append(
+                    f'<rect x="{ox}" y="{cy}" width="{cw}" height="{course_h}" fill="#991b1b" stroke="#7f1d1d" stroke-width="1" />'
+                )
+                # Staggered vertical joints
+                stagger = (c % 2) * 4.0 * scale
+                brick_w = 8.0 * scale
+                bx = ox + (stagger % brick_w)
+                while bx < ox + cw:
+                    brick_svg_lines.append(
+                        f'<line x1="{bx}" y1="{cy}" x2="{bx}" y2="{cy + course_h}" stroke="#450a0a" stroke-width="0.8" />'
+                    )
+                    bx += brick_w
+
+        bricks_markup = "\n  ".join(brick_svg_lines)
+
+        svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" width="100%" height="auto" style="background:#0f172a; font-family:monospace; border-radius:8px;">
+  <!-- Title & Metadata -->
+  <text x="30" y="35" fill="#38bdf8" font-size="15" font-weight="bold">DGC ARCHITECTURAL BLUEPRINT — EXPANDED CHIMNEY ELEVATION</text>
+  <text x="30" y="55" fill="#94a3b8" font-size="11">Masonry Scope: {spec.width_in}\"W x {spec.depth_in}\"D x {spec.height_above_roof_in}\"H | Soldier Course every {spec.soldier_interval_courses} courses | SPS 321.28 Code</text>
+
+  <!-- Roof Slope Line (6:12 Pitch) -->
+  <line x1="50" y1="{oy + ch + 30}" x2="650" y2="{oy + ch - 50}" stroke="#64748b" stroke-width="6" />
+  <text x="50" y="{oy + ch + 55}" fill="#64748b" font-size="10">SLOPED ROOF LINE (6:12 PITCH)</text>
+
+  <!-- Step Flashing Profile along Roofline -->
+  <path d="M {ox - 15} {oy + ch + 15} L {ox + cw + 15} {oy + ch - 15}" stroke="#cbd5e1" stroke-width="4" stroke-dasharray="8,4" />
+  <text x="{ox - 20}" y="{oy + ch + 35}" fill="#cbd5e1" font-size="10" text-anchor="end">26ga Step &amp; Counter Flashing</text>
+
+  <!-- Clay Flue Liner Projection -->
+  <rect x="{ox + cw/2 - 25}" y="{oy - 25}" width="50" height="25" fill="#c2410c" stroke="#ea580c" stroke-width="2" />
+  <text x="{ox + cw/2}" y="{oy - 10}" fill="#fdba74" font-size="9" text-anchor="middle">Clay Flue Liner</text>
+
+  <!-- Cast Concrete Wash Crown with Overhang Drip Edge -->
+  <rect x="{ox - 12}" y="{oy - 10}" width="{cw + 24}" height="16" fill="#475569" stroke="#94a3b8" stroke-width="2" rx="2" />
+  <text x="{ox + cw/2}" y="{oy + 2}" fill="#f1f5f9" font-size="10" text-anchor="middle" font-weight="bold">REINFORCED CONCRETE WASH CROWN (DRIP EDGE)</text>
+
+  <!-- Brick Masonry Courses -->
+  {bricks_markup}
+
+  <!-- Dimension Annotations -->
+  <line x1="{ox - 30}" y1="{oy}" x2="{ox - 30}" y2="{oy + ch}" stroke="#38bdf8" stroke-width="1.5" />
+  <text x="{ox - 35}" y="{oy + ch/2}" fill="#38bdf8" font-size="11" text-anchor="end">{spec.height_above_roof_in}\" HEIGHT</text>
+
+  <line x1="{ox}" y1="{oy + ch + 70}" x2="{ox + cw}" y2="{oy + ch + 70}" stroke="#38bdf8" stroke-width="1.5" />
+  <text x="{ox + cw/2}" y="{oy + ch + 85}" fill="#38bdf8" font-size="11" text-anchor="middle">{spec.width_in}\" WIDTH (EXPANDED FOOTPRINT)</text>
+
+  <!-- SPS 321.28 Compliance Note -->
+  <rect x="420" y="70" width="250" height="45" fill="#1e293b" stroke="#22c55e" stroke-width="1" rx="4" />
+  <text x="430" y="88" fill="#4ade80" font-size="10" font-weight="bold">WISCONSIN SPS 321.28 COMPLIANT</text>
+  <text x="430" y="103" fill="#94a3b8" font-size="9">Height &gt; 3ft above roof penetration</text>
+</svg>"""
+        return svg
+
+    @staticmethod
     def generate_cut_schedule(spec: Any) -> List[Dict[str, Any]]:
         """
         Generates a piece-by-piece fabrication cut schedule for field carpenters.
         Part of Layer 2: Fabrication Truth.
         """
         import math
+
         schedule = []
         if isinstance(spec, StairSpec):
             total_run_in = (spec.riser_count - 1) * spec.unit_run_in
@@ -233,6 +333,75 @@ class CADGenerator:
                 "fasteners": "16d nails into drop leg bottoms",
             })
 
+        elif isinstance(spec, ChimneySpec):
+            total_courses = max(4, int(spec.height_above_roof_in / 2.75))
+            soldier_courses = total_courses // (spec.soldier_interval_courses + 1)
+            running_courses = total_courses - soldier_courses
+            
+            running_bricks = running_courses * 14
+            soldier_bricks = soldier_courses * 41
+
+            schedule.append({
+                "mark": "BRK-RUN",
+                "name": f"Modular Red Clay Facing Brick (Running Courses: {running_courses})",
+                "stock": spec.brick_stock,
+                "cut_length_in": 8.0,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "quantity": running_bricks,
+                "fasteners": "Spec-Mix Type N Mortar (1/2\" full bed joints)",
+            })
+            schedule.append({
+                "mark": "BRK-SLD",
+                "name": f"Architectural Soldier Brick Courses (Soldier Courses: {soldier_courses})",
+                "stock": spec.brick_stock + " (Vertical Orientation)",
+                "cut_length_in": 8.0,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "quantity": soldier_bricks,
+                "fasteners": "Spec-Mix Type N Mortar (narrow face exposed)",
+            })
+            schedule.append({
+                "mark": "FLUE-01",
+                "name": "Vitrified Clay Flue Liner Sections",
+                "stock": spec.flue_stock + " 24\" sections",
+                "cut_length_in": 24.0,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "quantity": int(round(spec.height_above_roof_in / 24.0)) + 1,
+                "fasteners": "Refractory non-water-soluble mortar",
+            })
+            schedule.append({
+                "mark": "FLSH-STP",
+                "name": "Base Step Flashing Tins (10\"x10\")",
+                "stock": "26-gauge Painted Steel Step Flashing Tins",
+                "cut_length_in": 10.0,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "quantity": 25,
+                "fasteners": "Woven with shingle courses along roof pitch",
+            })
+            schedule.append({
+                "mark": "FLSH-CTR",
+                "name": "Reglet Counter Flashing",
+                "stock": "26-gauge Prepainted Steel Counter Flashing 10-ft",
+                "cut_length_in": 120.0,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "quantity": 2,
+                "fasteners": "Saw-cut mortar reglet joint + MasterSeal NP1",
+            })
+            schedule.append({
+                "mark": "CRN-01",
+                "name": "Monolithic Reinforced Concrete Wash Crown",
+                "stock": spec.crown_stock,
+                "cut_length_in": spec.width_in + 4.0,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "quantity": 1,
+                "fasteners": "Sakrete 5000 Plus with diamond metal lath reinforcement",
+            })
+
         return schedule
 
     @staticmethod
@@ -269,10 +438,26 @@ class CADGenerator:
                 {"sku": "2301540", "desc": "Pro-Rib #10 x 1-1/2\" Hex Washer Head Metal Screws (250ct)", "qty": 1, "unit_price": 19.99},
                 {"sku": "2181050", "desc": "Simpson Strong-Tie A35 Framing Angles (50ct box)", "qty": 1, "unit_price": 42.50},
             ]
+        elif isinstance(spec, ChimneySpec):
+            items = [
+                {"sku": "1791012", "desc": "Standard Modular Red Clay Facing Brick", "qty": 450, "unit_price": 0.89},
+                {"sku": "1891125", "desc": "Spec-Mix Type N Masonry Mortar 80 lb", "qty": 9, "unit_price": 11.49},
+                {"sku": "1891040", "desc": "8\" x 12\" x 24\" Vitrified Clay Flue Liner", "qty": 3, "unit_price": 38.50},
+                {"sku": "1568214", "desc": "10\" x 10\" Painted Steel Step Flashing (Pack of 25)", "qty": 1, "unit_price": 28.99},
+                {"sku": "1568240", "desc": "26-gauge Prepainted Steel Counter-Flashing 10-ft", "qty": 2, "unit_price": 24.50},
+                {"sku": "1891150", "desc": "Sakrete 5000 Plus High Strength Concrete Mix 60 lb", "qty": 2, "unit_price": 6.49},
+                {"sku": "5202100", "desc": "MasterSeal NP1 Polyurethane Masonry Sealant (10.1oz)", "qty": 2, "unit_price": 10.99},
+                {"sku": "2181050", "desc": "Galvanized Diamond Mesh Metal Lath 27\" x 96\"", "qty": 1, "unit_price": 14.99},
+            ]
+            if labor_hours == 16.0:  # Default override for chimney rebuild
+                labor_hours = 24.0
+            if duration_days == 2.0:
+                duration_days = 2.5
         else:
             items = [
                 {"sku": "1110815", "desc": "2x4-8' Premium SPF Studs", "qty": 10, "unit_price": 4.28},
             ]
+
 
         # Calculate line totals
         material_retail = 0.0
