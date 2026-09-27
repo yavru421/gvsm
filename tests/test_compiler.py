@@ -124,7 +124,92 @@ class TestGVSMCompiler(unittest.TestCase):
         self.assertIn("[CLADDING & PROFILES]:", result["compiled_diffusion_prompt"])
         self.assertTrue(result["cad_svg_blueprint"].startswith("<svg"))
         self.assertIn("SPIRAL DUCT", result["cad_svg_blueprint"])
+        self.assertGreater(len(result["cut_schedule"]), 0)
+        self.assertIn("menards_bom", result)
+        self.assertEqual(result["menards_bom"]["supplier"], "Menards (Wisconsin Rapids Store #3107)")
+        self.assertTrue(result["menards_bom"]["profit_floor_protected"])
+
+    def test_spatial_reprojection_validation(self):
+        """Verify sub-pixel reprojection error invariant (< 1.20 px)."""
+        # Should pass
+        GVSMValidator.validate_spatial_reprojection(0.85, threshold_px=1.20)
+        GVSMValidator.validate_spatial_reprojection(1.19, threshold_px=1.20)
+        
+        # Should fail
+        with self.assertRaises(ValidationError) as ctx:
+            GVSMValidator.validate_spatial_reprojection(1.35, threshold_px=1.20)
+        self.assertIn("SPATIAL REPROJECTION VIOLATION", str(ctx.exception))
+
+    def test_planar_orthogonality_validation(self):
+        """Verify planar orthogonality invariant (< 0.50 deg deviation from 90 deg)."""
+        # Perfect orthogonal floor [0, 1, 0] and wall [1, 0, 0] -> dot = 0 -> angle = 90 deg
+        floor = (0.0, 1.0, 0.0)
+        wall = (1.0, 0.0, 0.0)
+        dev = GVSMValidator.validate_planar_orthogonality(floor, wall, threshold_deg=0.50)
+        self.assertAlmostEqual(dev, 0.0, places=3)
+
+        # Slight tilt (within 0.5 deg)
+        import math
+        rad = math.radians(90.3)
+        wall_tilted = (math.sin(rad), math.cos(rad), 0.0)
+        dev_tilted = GVSMValidator.validate_planar_orthogonality(floor, wall_tilted, threshold_deg=0.50)
+        self.assertAlmostEqual(dev_tilted, 0.3, places=2)
+
+        # Excessive tilt (0.8 deg deviation) -> should fail
+        rad_fail = math.radians(90.8)
+        wall_fail = (math.sin(rad_fail), math.cos(rad_fail), 0.0)
+        with self.assertRaises(ValidationError) as ctx:
+            GVSMValidator.validate_planar_orthogonality(floor, wall_fail, threshold_deg=0.50)
+        self.assertIn("PLANAR ORTHOGONALITY VIOLATION", str(ctx.exception))
+
+    def test_scale_closure_validation(self):
+        """Verify metric scale closure invariant (< 1.5% against physical framing truth)."""
+        # 16.0" stud spacing measured as 16.15" -> error = 0.15/16 = 0.93% -> passes
+        GVSMValidator.validate_scale_closure(16.15, 16.0, threshold_ratio=0.015)
+
+        # 16.0" stud spacing measured as 16.4" -> error = 0.4/16 = 2.5% -> fails
+        with self.assertRaises(ValidationError) as ctx:
+            GVSMValidator.validate_scale_closure(16.4, 16.0, threshold_ratio=0.015)
+        self.assertIn("SCALE CLOSURE VIOLATION", str(ctx.exception))
+
+    def test_dgc_bid_floor_validation(self):
+        """Verify DGC $350+/day profit floor protection invariant."""
+        # Contract $2,500, materials $1,000, 2 days -> $1,500 / 2 = $750/day -> passes
+        daily_profit = GVSMValidator.validate_dgc_bid_floor(
+            contract_price=2500.0,
+            material_cost=1000.0,
+            direct_subs=0.0,
+            duration_days=2.0,
+            floor_per_day=350.0
+        )
+        self.assertEqual(daily_profit, 750.0)
+
+        # Contract $1,500, materials $1,000, 2 days -> $500 / 2 = $250/day -> fails
+        with self.assertRaises(ValidationError) as ctx:
+            GVSMValidator.validate_dgc_bid_floor(
+                contract_price=1500.0,
+                material_cost=1000.0,
+                direct_subs=0.0,
+                duration_days=2.0,
+                floor_per_day=350.0
+            )
+        self.assertIn("DGC PROFIT FLOOR VIOLATION", str(ctx.exception))
+
+    def test_cut_schedule_and_menards_bom(self):
+        """Verify cut schedule and single-supplier Menards BOM generation."""
+        stair_spec = StairSpec()
+        sched = CADGenerator.generate_cut_schedule(stair_spec)
+        self.assertGreater(len(sched), 5)
+        self.assertEqual(sched[0]["mark"], "STR-01")
+
+        bom = CADGenerator.generate_menards_bom(stair_spec, labor_hours=16.0, duration_days=2.0)
+        self.assertIn("Menards", bom["supplier"])
+        self.assertEqual(bom["material_markup_rate"], 0.15)
+        self.assertEqual(bom["labor_rate_hourly"], 80.00)
+        self.assertTrue(bom["profit_floor_protected"])
+        self.assertGreaterEqual(bom["daily_profit"], 350.00)
 
 
 if __name__ == "__main__":
     unittest.main()
+

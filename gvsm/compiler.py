@@ -22,6 +22,7 @@ class PromptSpec:
     aspect_ratio: str = "16:9"
     image_paths: List[str] = field(default_factory=list)
     style: str = "Photorealistic architectural visualization, professional contractor presentation style, crisp architectural lighting, zero geometric distortion"
+    geodetic_origin: str = "Wisconsin Rapids, WI (44°23'36\" N, 89°49'23\" W)"
 
     def compile(self) -> str:
         """Compile the 5 layers into a single cohesive multimodal prompt."""
@@ -75,7 +76,11 @@ class GVSMCompiler:
         "polyiso": "suspended Classic X 15/16-inch drop ceiling grid with custom-cut 1-inch foil-faced rigid polyiso insulation panels",
         "polycarbonate": "low-profile architectural canopy with bronze/smoke semi-translucent polycarbonate twin-wall roof panels in aluminum glazing bars",
         "craftsman_rail": "modern 2x2 craftsman-profile eased stained wood handrail mounted at 36-inch height with code-compliant 90-degree wall returns",
+        "grk_screws": "structural framing joined with GRK RSS 5/16x4-inch heavy-duty structural timber screws and PL Premium polyurethane adhesive",
+        "tapcon_anchors": "AC2 treated bottom kicker plate secured into concrete slab with 1/4x3-1/4-inch hex head Tapcon concrete anchors",
+        "simpson_angles": "cradle perimeter corners and drop legs reinforced with Simpson Strong-Tie A35 structural framing angles",
     }
+
 
     def __init__(self):
         pass

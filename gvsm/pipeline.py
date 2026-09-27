@@ -41,7 +41,7 @@ class GVSMPipeline:
         prompt_spec = self.compiler.parse_voice_memo(voice_memo, [photo_path])
         compiled_prompt = prompt_spec.compile()
 
-        # 3. Generate Deterministic SVG CAD Blueprint
+        # 3. Generate Deterministic SVG CAD Blueprint, Cut Schedule, and Menards BOM
         svg_blueprint = ""
         memo_lower = voice_memo.lower()
         if scope_type == "stairs" or "stair" in memo_lower:
@@ -54,6 +54,18 @@ class GVSMPipeline:
             # Default to stair section if unspecified
             spec = StairSpec()
             svg_blueprint = self.cad.render_stair_cross_section(spec)
+
+        cut_schedule = self.cad.generate_cut_schedule(spec)
+        menards_bom = self.cad.generate_menards_bom(spec, labor_hours=16.0, duration_days=2.0)
+
+        # Spatial Verification Specifications (Substrate Grounding Invariants)
+        spatial_invariants = {
+            "reprojection_error_max_px": 1.20,
+            "planar_orthogonality_max_dev_deg": 0.50,
+            "scale_closure_max_error_ratio": 0.015,
+            "dgc_profit_floor_min_per_day": 350.00,
+            "geodetic_origin": "Wisconsin Rapids, WI (44.3933° N, 89.8231° W)",
+        }
 
         result = {
             "substrate_photo": photo_path,
@@ -69,14 +81,23 @@ class GVSMPipeline:
             },
             "compiled_diffusion_prompt": compiled_prompt,
             "cad_svg_blueprint": svg_blueprint,
+            "cut_schedule": cut_schedule,
+            "menards_bom": menards_bom,
+            "spatial_invariants": spatial_invariants,
         }
 
         # 4. Save Bundle if output_dir requested
         if output_dir:
+            import json
             os.makedirs(output_dir, exist_ok=True)
             with open(os.path.join(output_dir, "gvsm_prompt.txt"), "w", encoding="utf-8") as f:
                 f.write(compiled_prompt)
             with open(os.path.join(output_dir, "blueprint.svg"), "w", encoding="utf-8") as f:
                 f.write(svg_blueprint)
+            with open(os.path.join(output_dir, "cut_schedule.json"), "w", encoding="utf-8") as f:
+                json.dump(cut_schedule, f, indent=2)
+            with open(os.path.join(output_dir, "menards_bom.json"), "w", encoding="utf-8") as f:
+                json.dump(menards_bom, f, indent=2)
 
         return result
+

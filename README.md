@@ -203,18 +203,26 @@ pip install -e .
 
 ### CLI Commands
 ```bash
-# 1. Compile a voice memo and photo into a 5-layer GVSM prompt
+# 1. Compile a voice memo and photo into a 5-layer GVSM prompt, CAD blueprint, cut schedule & BOM
 gvsm compile --photo images/chuck_miller_soffit/before_hvac_cradle.jpg \
-             --memo "Wrap this cradle in vertical prorib steel with drop grid polyiso underside"
+             --memo "Wrap this cradle in vertical prorib steel with drop grid polyiso underside" \
+             --out bundle_soffit/
 
 # 2. Generate a deterministic vector CAD blueprint
 gvsm cad --type stairs --out stair_section.svg
 gvsm cad --type soffit --out soffit_cradle.svg
 
-# 3. Pre-flight check photo and memo for GVSM invariants (anti-refeed, scope mismatches)
+# 3. Generate piece-by-piece fabrication cut schedule for field carpenters
+gvsm schedule --type stairs --out stair_cut_schedule.json
+gvsm schedule --type soffit --out soffit_cut_schedule.json
+
+# 4. Generate single-supplier Menards SKU BOM takeoff ($80/hr labor, 15% markup, $350+/day profit floor)
+gvsm bom --type stairs --hours 16.0 --days 2.0 --out menards_stair_bom.json
+
+# 5. Pre-flight check photo and memo for GVSM invariants (anti-refeed, scope mismatches)
 gvsm validate --photo images/lukaszewski_stairs/before_descent.jpg --memo "Build 11-riser staircase"
 
-# 4. Launch the interactive split-curtain comparison viewer
+# 6. Launch the interactive split-curtain comparison viewer
 gvsm serve --port 8080
 ```
 
@@ -225,7 +233,21 @@ python -m unittest tests/test_compiler.py
 
 ---
 
-## 7. Interactive Split-Curtain Comparison Suite
+## 7. Formal System Specification & Mathematical Invariants
+
+For complete mathematical derivations, PnP 6-DoF formulations, and statutory code integration, see:  
+👉 **[GVSM System Formalization & Mathematical Specification](docs/GVSM_SYSTEM_FORMALIZATION_MATHEMATICAL_SPECIFICATION.md)**
+
+### Anti-Hallucination & Grounding Invariants:
+1. **Sub-Pixel Reprojection Invariant**: $\epsilon_{\text{reproj}} < 1.20\text{ px}$ on 1080p frames across all physical substrate landmarks.
+2. **Planar Orthogonality Invariant**: $|\Delta\theta| < 0.50^\circ$ deviation between plumb wall normals and level substrate planes.
+3. **Metric Scale Closure Invariant**: $\eta_{\text{scale}} < 1.50\%$ closure error against known 16" O.C. framing and 48" scaffold geometry.
+4. **Anti-Refeed Guard**: Strict prohibition against passing generative AI renders into diffusion turns.
+5. **DGC Profit Floor Invariant**: Enforcement of $\ge \$350.00/\text{day}$ profit floor on every billable job day in Wisconsin Rapids, WI.
+
+---
+
+## 8. Interactive Split-Curtain Comparison Suite
 
 Open `web/index.html` in any browser (or run `gvsm serve`) to interactively scrub between the raw substrate and the GVSM cutaway visualizations:
 
@@ -235,22 +257,25 @@ Open `web/index.html` in any browser (or run `gvsm serve`) to interactively scru
 
 ---
 
-## 8. Repository Structure
+## 9. Repository Structure
 
 ```
+├── docs/
+│   └── GVSM_SYSTEM_FORMALIZATION_MATHEMATICAL_SPECIFICATION.md # Authoritative engineering spec
 ├── gvsm/
 │   ├── __init__.py           # Package exports & version
 │   ├── compiler.py           # 5-layer semantic prompt compiler & voice memo parser
-│   ├── cad.py                # Deterministic inline SVG CAD generator (stairs, soffits)
-│   ├── validator.py          # Anti-refeed guard & multi-element scope mismatch detector
+│   ├── cad.py                # Deterministic inline SVG CAD & cut schedule / Menards BOM generator
+│   ├── validator.py          # Anti-refeed, scope mismatch & mathematical invariant validator
 │   ├── pipeline.py           # End-to-end dual-deliverable orchestration pipeline
-│   └── cli.py                # Command-line interface (compile, cad, validate, serve)
+│   └── cli.py                # CLI (compile, cad, schedule, bom, validate, serve)
 ├── images/
 │   ├── chuck_miller_soffit/  # Chuck Miller HVAC framing & GVSM cutaways
+│   ├── logo/                 # GVSM Geodetic Benchmark Medallion & vector brand identity
 │   ├── lukaszewski_stairs/   # Lukaszewski basement stairway & headroom cutaways
 │   └── madden_patio/         # Madden patio canopy, pavilion & collapse infographic
 ├── tests/
-│   └── test_compiler.py      # Automated unit and integration test suite
+│   └── test_compiler.py      # Automated unit and integration test suite (13 passing)
 ├── web/
 │   └── index.html            # Zero-dependency interactive split-curtain viewer
 ├── pyproject.toml            # Python package setup & CLI entrypoint
@@ -260,7 +285,9 @@ Open `web/index.html` in any browser (or run `gvsm serve`) to interactively scru
 
 ---
 
-## 9. License & Credits
+## 10. License & Credits
 
 Developed by **John Dondlinger** ([Dondlinger General Contracting](https://dondlingergc.com)) in collaboration with **Antigravity** (Google DeepMind Advanced Agentic Coding).  
+Geodetic Survey Origin: Wisconsin Rapids, WI ($44^\circ 23' 36''\text{ N}, 89^\circ 49' 23''\text{ W}$).  
 Proprietary methodology for Zero-Liability Architecture (ZLA) field operations.
+

@@ -142,3 +142,186 @@ class CADGenerator:
   <text x="{ox + cradle_w/2}" y="{oy + cradle_h + 25}" fill="#38bdf8" font-size="11" text-anchor="middle">15/16\" Drop Grid + Foil-Faced Polyiso / 1/2\" PVC</text>
 </svg>"""
         return svg
+
+    @staticmethod
+    def generate_cut_schedule(spec: Any) -> List[Dict[str, Any]]:
+        """
+        Generates a piece-by-piece fabrication cut schedule for field carpenters.
+        Part of Layer 2: Fabrication Truth.
+        """
+        import math
+        schedule = []
+        if isinstance(spec, StairSpec):
+            total_run_in = (spec.riser_count - 1) * spec.unit_run_in
+            stringer_len_in = math.sqrt(spec.total_rise_in**2 + total_run_in**2)
+            plumb_cut_deg = math.degrees(math.atan2(spec.unit_rise_in, spec.unit_run_in))
+            seat_cut_deg = 90.0 - plumb_cut_deg
+
+            for idx in range(1, 4):
+                schedule.append({
+                    "mark": f"STR-0{idx}",
+                    "name": f"Stair Stringer #{idx} (Left/Center/Right)",
+                    "stock": spec.stringer_stock + " 16-ft",
+                    "cut_length_in": round(stringer_len_in + 12.0, 2),
+                    "plumb_cut_angle_deg": round(plumb_cut_deg, 1),
+                    "seat_cut_angle_deg": round(seat_cut_deg, 1),
+                    "step_count": spec.riser_count,
+                    "fasteners": "GRK RSS 5/16x4\" Timber Screws + PL Premium Polyurethane",
+                })
+
+            for idx in range(1, spec.riser_count):
+                schedule.append({
+                    "mark": f"TRD-{idx:02d}",
+                    "name": f"Stair Tread #{idx}",
+                    "stock": spec.tread_stock + " (Bullnosed)",
+                    "cut_length_in": 36.0,
+                    "plumb_cut_angle_deg": 0.0,
+                    "seat_cut_angle_deg": 0.0,
+                    "fasteners": "3x GRK TopStar / 3\" Deck Screws per stringer bearing",
+                })
+
+            schedule.append({
+                "mark": "KCK-01",
+                "name": "Base Kicker Plate",
+                "stock": "2x4 AC2 Ground Contact Pressure-Treated 8-ft",
+                "cut_length_in": 36.0,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "fasteners": "4x 1/4\"x3-1/4\" Tapcon Concrete Screw Anchors into slab",
+            })
+
+        elif isinstance(spec, SoffitSpec):
+            run_in = 192.0  # Default 16-ft run
+            stud_count = int(run_in // 16.0) + 1
+
+            for idx in range(1, stud_count + 1):
+                schedule.append({
+                    "mark": f"DROP-{idx:02d}",
+                    "name": f"Cradle Vertical Drop Leg #{idx}",
+                    "stock": spec.framing_stock + " 8-ft",
+                    "cut_length_in": spec.drop_in,
+                    "plumb_cut_angle_deg": 0.0,
+                    "seat_cut_angle_deg": 0.0,
+                    "fasteners": "3x 16d Paslode framing nails into truss bottom chord",
+                })
+                schedule.append({
+                    "mark": f"TIE-{idx:02d}",
+                    "name": f"Cradle Horizontal Bottom Tie #{idx}",
+                    "stock": spec.framing_stock + " 8-ft",
+                    "cut_length_in": spec.width_in,
+                    "plumb_cut_angle_deg": 0.0,
+                    "seat_cut_angle_deg": 0.0,
+                    "fasteners": "2x 16d nails each corner + Simpson Strong-Tie A35 angle",
+                })
+
+            schedule.append({
+                "mark": "RUN-01",
+                "name": "Continuous Bottom Plate Runner (Left)",
+                "stock": spec.framing_stock + " 16-ft",
+                "cut_length_in": run_in,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "fasteners": "16d nails into drop leg bottoms",
+            })
+            schedule.append({
+                "mark": "RUN-02",
+                "name": "Continuous Bottom Plate Runner (Right)",
+                "stock": spec.framing_stock + " 16-ft",
+                "cut_length_in": run_in,
+                "plumb_cut_angle_deg": 0.0,
+                "seat_cut_angle_deg": 0.0,
+                "fasteners": "16d nails into drop leg bottoms",
+            })
+
+        return schedule
+
+    @staticmethod
+    def generate_menards_bom(
+        spec: Any,
+        labor_hours: float = 16.0,
+        duration_days: float = 2.0
+    ) -> Dict[str, Any]:
+        """
+        Compiles an itemized single-supplier Menards Bill of Materials (Store #3107 catalog),
+        applies 15% material markup, $80/hr labor calibration, and enforces $350+/day profit floor.
+        Part of DGC Core Four Contract Suite coupling.
+        """
+        items = []
+        if isinstance(spec, StairSpec):
+            items = [
+                {"sku": "1112836", "desc": "2x12-16' #2 Douglas Fir Lumber (Stringers)", "qty": 3, "unit_price": 28.99},
+                {"sku": "1112108", "desc": "2x12-12' Cedartone Premium Wood Treads", "qty": 4, "unit_price": 24.49},
+                {"sku": "1111620", "desc": "2x4-8' AC2 Ground Contact Pressure-Treated", "qty": 1, "unit_price": 6.89},
+                {"sku": "1041443", "desc": "1x8-8' Primed White Wood Risers", "qty": 5, "unit_price": 14.99},
+                {"sku": "2301211", "desc": "GRK RSS 5/16\" x 4\" Structural Timber Screws (50ct)", "qty": 1, "unit_price": 31.98},
+                {"sku": "2321890", "desc": "Tapcon 1/4\" x 3-1/4\" Hex Concrete Anchors (25ct)", "qty": 1, "unit_price": 18.49},
+                {"sku": "5201505", "desc": "Loctite PL Premium Max Polyurethane Subfloor Adhesive (28oz)", "qty": 2, "unit_price": 12.98},
+            ]
+        elif isinstance(spec, SoffitSpec):
+            items = [
+                {"sku": "1110815", "desc": "2x4-8' Premium SPF Studs (Cradle framing)", "qty": 18, "unit_price": 4.28},
+                {"sku": "1110828", "desc": "2x4-16' Premium SPF Plate Runners", "qty": 4, "unit_price": 9.98},
+                {"sku": "1561021", "desc": "Pro-Rib Bright White 29-gauge Steel Liner Panel 36\"x8'", "qty": 6, "unit_price": 26.50},
+                {"sku": "1564205", "desc": "Pro-Rib Bright White J-Trim 10-ft", "qty": 4, "unit_price": 11.25},
+                {"sku": "1429329", "desc": "1/2\" x 2' x 4' Solid Smooth White PVC Ceiling Tile", "qty": 8, "unit_price": 14.99},
+                {"sku": "1421015", "desc": "15/16\" Classic X White Main Runner 12-ft", "qty": 4, "unit_price": 18.50},
+                {"sku": "1421028", "desc": "15/16\" Classic X White Cross Tee 4-ft", "qty": 10, "unit_price": 5.25},
+                {"sku": "2301540", "desc": "Pro-Rib #10 x 1-1/2\" Hex Washer Head Metal Screws (250ct)", "qty": 1, "unit_price": 19.99},
+                {"sku": "2181050", "desc": "Simpson Strong-Tie A35 Framing Angles (50ct box)", "qty": 1, "unit_price": 42.50},
+            ]
+        else:
+            items = [
+                {"sku": "1110815", "desc": "2x4-8' Premium SPF Studs", "qty": 10, "unit_price": 4.28},
+            ]
+
+        # Calculate line totals
+        material_retail = 0.0
+        bom_rows = []
+        for it in items:
+            line_total = round(it["qty"] * it["unit_price"], 2)
+            material_retail += line_total
+            bom_rows.append({
+                "sku": it["sku"],
+                "description": it["desc"],
+                "quantity": it["qty"],
+                "unit_price": it["unit_price"],
+                "total_price": line_total
+            })
+
+        material_retail = round(material_retail, 2)
+        # DGC 15% Material Markup
+        material_marked_up = round(material_retail * 1.15, 2)
+        material_markup_profit = round(material_marked_up - material_retail, 2)
+
+        # DGC $80/hr Labor Calibration
+        labor_rate_hourly = 80.00
+        labor_total = round(labor_hours * labor_rate_hourly, 2)
+
+        # Turnkey Proposal Contract Price
+        contract_proposal_price = round(material_marked_up + labor_total, 2)
+
+        # Gross margin & Daily profit check
+        gross_margin = round(contract_proposal_price - material_retail, 2)
+        if duration_days <= 0:
+            duration_days = 1.0
+        daily_profit = round(gross_margin / duration_days, 2)
+
+        profit_floor_met = daily_profit >= 350.00
+
+        return {
+            "supplier": "Menards (Wisconsin Rapids Store #3107)",
+            "line_items": bom_rows,
+            "material_retail_subtotal": material_retail,
+            "material_markup_rate": 0.15,
+            "material_client_price": material_marked_up,
+            "labor_hours": labor_hours,
+            "labor_rate_hourly": labor_rate_hourly,
+            "labor_client_total": labor_total,
+            "turnkey_contract_proposal_price": contract_proposal_price,
+            "gross_margin": gross_margin,
+            "duration_days": duration_days,
+            "daily_profit": daily_profit,
+            "profit_floor_min_per_day": 350.00,
+            "profit_floor_protected": profit_floor_met
+        }
+
