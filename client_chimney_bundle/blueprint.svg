@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg"
   xmlns:gvsm="https://dondlingergc.com/gvsm/v1.0"
-  gvsm:jobId="PRAHL_CHIMNEY"
+  gvsm:jobId="CLIENT_CHIMNEY"
   gvsm:geodeticOrigin="44°23'36&quot;N, 89°49'23&quot;W (Wisconsin Rapids, WI)"
   gvsm:operator="John Dondlinger (Dondlinger General Contracting)"
-  gvsm:signature="DGC-GVSM-PRAHL-WI"
+  gvsm:signature="DGC-GVSM-CLIENT-WI"
   viewBox="0 0 700 600" width="100%" height="auto" style="background:#0f172a; font-family:monospace; border-radius:8px;">
   <!-- Title & Metadata -->
   <text x="30" y="35" fill="#38bdf8" font-size="15" font-weight="bold">DGC ARCHITECTURAL BLUEPRINT — EXPANDED CHIMNEY ELEVATION</text>
@@ -169,7 +169,7 @@
     
     <!-- Geodetic Legend -->
     <text x="45" y="14" fill="#f8fafc" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="bold" letter-spacing="1">DGC GROUNDED VISUAL SITE MODELING (GVSM)</text>
-    <text x="45" y="27" fill="#94a3b8" font-family="'Segoe UI', Arial, sans-serif" font-size="9">DATUM: 44°23'36"N, 89°49'23"W (Wisconsin Rapids, WI) • JOB: PRAHL_CHIMNEY • SIG: DGC-GVSM-PRAHL-WI</text>
+    <text x="45" y="27" fill="#94a3b8" font-family="'Segoe UI', Arial, sans-serif" font-size="9">DATUM: 44°23'36"N, 89°49'23"W (Wisconsin Rapids, WI) • JOB: CLIENT_CHIMNEY • SIG: DGC-GVSM-CLIENT-WI</text>
     <text x="45" y="38" fill="#64748b" font-family="'Segoe UI', Arial, sans-serif" font-size="8">ZERO-LIABILITY ARCHITECTURE (ZLA) • WISCONSIN SPS 321 COMPLIANT • 17 U.S.C. § 1202 PROTECTED</text>
   </g>
 </svg>

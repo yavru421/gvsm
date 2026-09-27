@@ -288,9 +288,9 @@ Every takeoff and estimate compiled through GVSM must strictly enforce DGC finan
 
 | Project Identifier | Physical Substrate | GVSM Intervention | Client Outcome |
 | :--- | :--- | :--- | :--- |
-| **Chuck Miller Shop** | Suspended 2x4 framing cradle, unit heater, spiral duct | Dual-Deliverable Cutaway: Bright White Pro-Rib vertical liner, Classic X drop grid, polyiso, cutaway revealing equipment | **Change Order CO-02 ($1,850.85)** approved on sight by Chuck & Sharon Miller with **zero questions asked**. |
-| **Lukaszewski Stairs** | Dark green carpet, dangerous 5'9" ceiling pinch bulkhead | Safe Headroom Descent: Solid 2x12 Cedartone treads, satin risers, 82" clear rake line, framing cutaway with Tapcons | Bulkhead cutback verified against SPS 321.04; immediate client signing. |
-| **Madden Patio Shelter** | Open stamped patio, 6-ft privacy fence, house vinyl wall | Forensic Failure Infographic: Proved unbraced wedge snaps fence posts under 3,500 lb snowpack; presented heavy timber pavilion | Client abandoned dangerous DIY plan; opted for engineered freestanding structure. |
+| **Client Shop** | Suspended 2x4 framing cradle, unit heater, spiral duct | Dual-Deliverable Cutaway: Bright White Pro-Rib vertical liner, Classic X drop grid, polyiso, cutaway revealing equipment | **Change Order CO-02 ($1,850.85)** approved on sight by the client with **zero questions asked**. |
+| **Client Stairs** | Dark green carpet, dangerous 5'9" ceiling pinch bulkhead | Safe Headroom Descent: Solid 2x12 Cedartone treads, satin risers, 82" clear rake line, framing cutaway with Tapcons | Bulkhead cutback verified against SPS 321.04; immediate client signing. |
+| **Client Patio Shelter** | Open stamped patio, 6-ft privacy fence, house vinyl wall | Forensic Failure Infographic: Proved unbraced wedge snaps fence posts under 3,500 lb snowpack; presented heavy timber pavilion | Client abandoned dangerous DIY plan; opted for engineered freestanding structure. |
 
 ---
 

@@ -13,15 +13,15 @@
 
 Every example below was generated directly from real-world jobsite photographs taken on site by John Dondlinger (Dondlinger General Contracting) and processed through the GVSM engine.
 
-### Project 1: Chuck Miller Garage Shop — Suspended HVAC Soffit Enclosure
-*Location*: Commercial / Residential Garage Shop (Chuck & Sharon Miller)  
+### Project 1: Client Garage Shop — Suspended HVAC Soffit Enclosure
+*Location*: Commercial / Residential Garage Shop (Client)  
 *Objective*: Enclose a suspended overhead furnace unit and horizontal spiral ductwork inside a clean, insulated mechanical soffit cradle. Clad with vertical Bright White Pro-Rib steel, front return air grille, and a 15/16" drop ceiling grid with foil-faced insulation.  
-*Result*: Chuck and Sharon Miller **separately** loved the render and approved Change Order CO-02 ($1,850.85) on sight with **zero hesitation and zero questions asked**.
+*Result*: The client loved the render and approved Change Order CO-02 ($1,850.85) on sight with **zero hesitation and zero questions asked**.
 
 #### View A: The Mechanical Cradle & Finished Cutaway
 | Baseline Jobsite Photo (Before) | GVSM Architectural Cutaway Remodel (After) |
 | :---: | :---: |
-| ![Before HVAC Cradle](images/chuck_miller_soffit/before_hvac_cradle.jpg) | ![GVSM Soffit Cutaway](images/chuck_miller_soffit/gvsm_soffit_cutaway.jpg) |
+| ![Before HVAC Cradle](images/client_soffit/before_hvac_cradle.jpg) | ![GVSM Soffit Cutaway](images/client_soffit/gvsm_soffit_cutaway.jpg) |
 | *Suspended 2x4 wooden cradle, horizontal unit heater, spiral duct, ladder, and raw garage framing.* | *Vertical Bright White Pro-Rib steel liner, front return air grille, continuous J-trim, drop ceiling grid, and architectural cutaway section revealing the internal equipment.* |
 
 ---
@@ -29,19 +29,19 @@ Every example below was generated directly from real-world jobsite photographs t
 #### View B: Foil-Faced Polyiso & Return Air Mesh (Refined Engineering Variant)
 | GVSM Foil-Faced Polyiso & Return Mesh Variant |
 | :---: |
-| ![Foil Mesh Variant](images/chuck_miller_soffit/gvsm_foil_mesh_soffit.jpg) |
+| ![Foil Mesh Variant](images/client_soffit/gvsm_foil_mesh_soffit.jpg) |
 | *Engineering revision showing 1" foil-faced rigid polyiso panels custom-cut into the 15/16" Classic X grid, with perforated air return mesh for optimal furnace intake CFM.* |
 
 ---
 
-### Project 2: Lukaszewski Stairway & Bulkhead Remodel
-*Location*: Residential Interior Stairwell (Sam's Mom's House, Jennifer Lukaszewski)  
+### Project 2: Client Stairway & Bulkhead Remodel
+*Location*: Residential Interior Stairwell (Client Residence)  
 *Objective*: Replace squeaky dark green carpet with solid 2x12 Cedartone treads, and solve a dangerous 5'9" ceiling pinch-point by cutting back the second-floor bulkhead to establish code-compliant 80"+ clear vertical headroom.
 
 #### View A: Basement Hallway Looking Up
 | Baseline Jobsite Photo (Before) | GVSM Architectural Remodel (After) |
 | :---: | :---: |
-| ![Before Hallway](images/lukaszewski_stairs/before_hallway.jpg) | ![GVSM Remodel](images/lukaszewski_stairs/gvsm_remodel.jpg) |
+| ![Before Hallway](images/client_stairs/before_hallway.jpg) | ![GVSM Remodel](images/client_stairs/gvsm_remodel.jpg) |
 | *Dark green plush carpet, low drywall bulkhead over steps 4–5 pinching headroom.* | *Solid 2x12 Cedartone treads, satin white risers, craftsman rail, and reframed ceiling bulkhead with warm recessed step lighting.* |
 
 ---
@@ -49,7 +49,7 @@ Every example below was generated directly from real-world jobsite photographs t
 #### View B: Upper Entry Threshold Looking Down
 | Baseline Jobsite Photo (Before) | GVSM Safe Headroom Descent (After) |
 | :---: | :---: |
-| ![Before Descent](images/lukaszewski_stairs/before_descent.jpg) | ![GVSM Descent](images/lukaszewski_stairs/gvsm_descent.jpg) |
+| ![Before Descent](images/client_stairs/before_descent.jpg) | ![GVSM Descent](images/client_stairs/gvsm_descent.jpg) |
 | *Steep, dark descent from the tile landing with tight overhead ceiling clearance.* | *Clean tile-to-tread threshold transition, continuous craftsman handrail, and tall 82" clear rake headroom descent.* |
 
 ---
@@ -57,19 +57,19 @@ Every example below was generated directly from real-world jobsite photographs t
 #### View C: Structural Rough Carpentry & Slab Anchoring (The X-Ray)
 | Baseline Jobsite Photo (Before) | GVSM Framing & Base Anchoring Cutaway (After) |
 | :---: | :---: |
-| ![Before Midflight](images/lukaszewski_stairs/before_framing.jpg) | ![GVSM Framing Cutaway](images/lukaszewski_stairs/gvsm_framing_cutaway.jpg) |
+| ![Before Midflight](images/client_stairs/before_framing.jpg) | ![GVSM Framing Cutaway](images/client_stairs/gvsm_framing_cutaway.jpg) |
 | *Existing drywall partition hiding underlying stringers and base connection.* | *Drywall peeled back to reveal triple 2x12 stringers, PL Premium adhesive bedding, GRK RSS timber screws, and Tapcon-anchored AC2 treated kicker plate on the concrete slab.* |
 
 ---
 
-### Project 3: Madden’s Patio Workshop & Scrapper Canopy
+### Project 3: Client Patio Workshop & Scrapper Canopy
 *Location*: Exterior Stamped Concrete Patio  
-*Objective*: 18-year-old scrapper Madden needed a winter outdoor workspace. The family proposed an un-engineered, freestanding single-pitch roof attached to a 6-foot wooden privacy fence. GVSM was deployed as a **persuasive forensic truth-teller** to visualize the client's concept, prove its structural failure modes, and present engineered alternatives.
+*Objective*: The client needed a winter outdoor workspace for scrapping. The client family proposed an un-engineered, freestanding single-pitch roof attached to a 6-foot wooden privacy fence. GVSM was deployed as a **persuasive forensic truth-teller** to visualize the client's concept, prove its structural failure modes, and present engineered alternatives.
 
 #### View A: The Literal Wedge (What the Client Asked For)
 | Baseline Jobsite Photo (Before) | GVSM Iteration 1: The Literal Wedge (After) |
 | :---: | :---: |
-| ![Before Patio](images/madden_patio/before_patio.jpg) | ![Literal Wedge](images/madden_patio/gvsm_literal_wedge.jpg) |
+| ![Before Patio](images/client_patio/before_patio.jpg) | ![Literal Wedge](images/client_patio/gvsm_literal_wedge.jpg) |
 | *Open stamped patio bounded by vinyl house wall with window and 6-ft wooden privacy fence.* | *Shows what they asked for: a towering 10.5-ft monopitch canopy that casts the window in dark shadow and creates an awkward ski jump over the fence.* |
 
 ---
@@ -77,7 +77,7 @@ Every example below was generated directly from real-world jobsite photographs t
 #### View B: The Freestanding Work Pavilion (The Professional Fix)
 | Baseline Jobsite Photo (Before) | GVSM Iteration 2: Heavy-Timber Pavilion (After) |
 | :---: | :---: |
-| ![Before Patio](images/madden_patio/before_patio.jpg) | ![Work Pavilion](images/madden_patio/gvsm_work_pavilion.jpg) |
+| ![Before Patio](images/client_patio/before_patio.jpg) | ![Work Pavilion](images/client_patio/gvsm_work_pavilion.jpg) |
 | *Raw patio corner with empty sky.* | *Freestanding 4-post 6x6 timber pavilion with 4x4 knee braces, bronze semi-translucent polycarbonate daylighting panels, integrated gutters, and dedicated scrapper workbench.* |
 
 ---
@@ -85,7 +85,7 @@ Every example below was generated directly from real-world jobsite photographs t
 #### View C: The Dedicated Fence-Line Scrapper Nook (Footprint Saver)
 | Baseline Jobsite Photo (Before) | GVSM Iteration 3: Fence-Line Shelter (After) |
 | :---: | :---: |
-| ![Before Patio](images/madden_patio/before_patio.jpg) | ![Scrapper Nook](images/madden_patio/gvsm_scrapper_nook.jpg) |
+| ![Before Patio](images/client_patio/before_patio.jpg) | ![Scrapper Nook](images/client_patio/gvsm_scrapper_nook.jpg) |
 | *Full view of the stamped patio slab.* | *Compact 5-ft covered workbench station built exclusively along the fence perimeter, keeping 70% of the patio wide open for the family grill and fire pit.* |
 
 ---
@@ -93,7 +93,7 @@ Every example below was generated directly from real-world jobsite photographs t
 #### View D: The Forensic Collapse Infographic (The Argument Settler)
 | GVSM Forensic Engineering Failure Infographic |
 | :---: |
-| ![Forensic Infographic](images/madden_patio/gvsm_forensic_collapse_infographic.jpg) |
+| ![Forensic Infographic](images/client_patio/gvsm_forensic_collapse_infographic.jpg) |
 | *Visual engineering proof showing the 3,500 lb wet snowpack bellying rafters, red crosshairs where 6-ft fence posts snap under lateral thrust at groundline, and yellow racking vectors showing unbraced posts sliding off the slab.* |
 
 ---
@@ -204,7 +204,7 @@ pip install -e .
 ### CLI Commands
 ```bash
 # 1. Compile a voice memo and photo into a 5-layer GVSM prompt, CAD blueprint, cut schedule & BOM
-gvsm compile --photo images/chuck_miller_soffit/before_hvac_cradle.jpg \
+gvsm compile --photo images/client_soffit/before_hvac_cradle.jpg \
              --memo "Wrap this cradle in vertical prorib steel with drop grid polyiso underside" \
              --out bundle_soffit/
 
@@ -220,25 +220,27 @@ gvsm schedule --type soffit --out soffit_cut_schedule.json
 gvsm bom --type stairs --hours 16.0 --days 2.0 --out menards_stair_bom.json
 
 # 5. Pre-flight check photo and memo for GVSM invariants (anti-refeed, scope mismatches)
-gvsm validate --photo images/lukaszewski_stairs/before_descent.jpg --memo "Build 11-riser staircase"
+gvsm validate --photo images/client_stairs/before_descent.jpg --memo "Build 11-riser staircase"
 
-# 6. Apply Tri-Layer Forensic Watermark (Geodetic Collar + 2D-DCT Steganography + Merkle Provenance)
-gvsm watermark --input images/chuck_miller_soffit/gvsm_soffit_cutaway.jpg \
-               --out images/chuck_miller_soffit/gvsm_soffit_cutaway_watermarked.jpg \
-               --job CHUCK_MILLER_SOFFIT
+# 6. Interactive Asset Workflow (Instant 3-Option Dispatcher)
+gvsm "images/client_soffit/gvsm_soffit_cutaway.jpg"
+# Presents: 1.) watermarker, 2.) verifier, 3.) info
 
-# 7. Forensically verify image authenticity and extract 2D-DCT frequency watermark payload
-gvsm verify --input images/chuck_miller_soffit/gvsm_soffit_cutaway_watermarked.jpg \
-            --job CHUCK_MILLER_SOFFIT
+# 7. Apply Standalone Tri-Layer Watermark (Geodetic Collar + 2D-DCT Stego + EXIF/PNG Container Metadata)
+gvsm watermark --input images/client_soffit/gvsm_soffit_cutaway.jpg \
+               --out images/client_soffit/gvsm_soffit_cutaway_watermarked.jpg \
+               --job CLIENT_SOFFIT
 
-# 8. Launch the interactive split-curtain comparison viewer
+# 8. Autonomous Forensic Verification (Zero Sidecar JSON Files Required)
+gvsm verify --input images/client_soffit/gvsm_soffit_cutaway_watermarked.jpg
+
+# 9. Launch the interactive split-curtain comparison viewer
 gvsm serve --port 8080
 ```
 
 ### Running Tests
 ```bash
-python -m unittest tests/test_compiler.py
-python -m unittest tests/test_watermark.py
+python -m unittest discover tests
 ```
 
 ---
@@ -263,7 +265,7 @@ Open `web/index.html` in any browser (or run `gvsm serve`) to interactively scru
 
 * **Interactive Curtain Slider**: Scrub 0–100% across the authentic site photo and the GVSM render.
 * **Dual-Deliverable Inspector**: Inspect the compiled 5-layer prompt spec and the millimeter-accurate vector CAD blueprint side-by-side.
-* **Pre-Loaded Projects**: Chuck Miller HVAC Soffit, Lukaszewski Stairs, and Madden Patio Canopy.
+* **Pre-Loaded Projects**: Client HVAC Soffit, Client Stairs, and Client Patio Canopy.
 
 ---
 
@@ -280,10 +282,10 @@ Open `web/index.html` in any browser (or run `gvsm serve`) to interactively scru
 │   ├── pipeline.py           # End-to-end dual-deliverable orchestration pipeline
 │   └── cli.py                # CLI (compile, cad, schedule, bom, validate, serve)
 ├── images/
-│   ├── chuck_miller_soffit/  # Chuck Miller HVAC framing & GVSM cutaways
+│   ├── client_soffit/        # Client HVAC framing & GVSM cutaways
 │   ├── logo/                 # GVSM Geodetic Benchmark Medallion & vector brand identity
-│   ├── lukaszewski_stairs/   # Lukaszewski basement stairway & headroom cutaways
-│   └── madden_patio/         # Madden patio canopy, pavilion & collapse infographic
+│   ├── client_stairs/        # Client basement stairway & headroom cutaways
+│   └── client_patio/         # Client patio canopy, pavilion & collapse infographic
 ├── tests/
 │   └── test_compiler.py      # Automated unit and integration test suite (13 passing)
 ├── web/

@@ -9,31 +9,31 @@ and registers cryptographic provenance certificates for every asset.
 import os
 import sys
 import shutil
-from gvsm.watermark import GVSMWatermarker
+from .engine import GVSMWatermarker
 
 def run_batch_watermark():
-    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     images_dir = os.path.join(repo_root, "images")
 
     targets = [
-        # Chuck Miller Soffit
+        # Client Soffit
         {
-            "dir": "chuck_miller_soffit",
-            "job_id": "CHUCK_MILLER_HVAC_SOFFIT",
+            "dir": "client_soffit",
+            "job_id": "CLIENT_HVAC_SOFFIT",
             "renders": ["gvsm_soffit_cutaway.jpg", "gvsm_foil_mesh_soffit.jpg"],
             "substrate": "before_hvac_cradle.jpg",
         },
-        # Lukaszewski Stairs
+        # Client Stairs
         {
-            "dir": "lukaszewski_stairs",
-            "job_id": "LUKASZEWSKI_BASEMENT_STAIRS",
+            "dir": "client_stairs",
+            "job_id": "CLIENT_BASEMENT_STAIRS",
             "renders": ["gvsm_descent.jpg", "gvsm_framing_cutaway.jpg", "gvsm_remodel.jpg"],
             "substrate": "before_descent.jpg",
         },
-        # Madden Patio
+        # Client Patio
         {
-            "dir": "madden_patio",
-            "job_id": "MADDEN_OUTDOOR_PAVILION",
+            "dir": "client_patio",
+            "job_id": "CLIENT_OUTDOOR_PAVILION",
             "renders": [
                 "gvsm_work_pavilion.jpg",
                 "gvsm_literal_wedge.jpg",
@@ -42,10 +42,10 @@ def run_batch_watermark():
             ],
             "substrate": "before_patio.jpg",
         },
-        # Prahl Roof Chimney
+        # Client Roof Chimney
         {
-            "dir": "prahl_roof_chimney",
-            "job_id": "PRAHL_ROOF_CHIMNEY_REBUILD",
+            "dir": "client_roof_chimney",
+            "job_id": "CLIENT_ROOF_CHIMNEY_REBUILD",
             "renders": ["gvsm_chimney_ridge_cutaway.jpg", "gvsm_chimney_slope_cutaway.jpg"],
             "substrate": "before_chimney_ridge.jpg",
         },

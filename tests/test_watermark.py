@@ -27,7 +27,7 @@ class TestGVSMWatermark(unittest.TestCase):
 
     def setUp(self):
         self.watermarker = GVSMWatermarker()
-        self.job_id = "CHUCK_MILLER_HVAC_SOFFIT"
+        self.job_id = "CLIENT_HVAC_SOFFIT"
 
     def test_dct_idct_mathematical_precision(self):
         """Verify 2D-DCT and 2D-IDCT are exact orthogonal inverses."""

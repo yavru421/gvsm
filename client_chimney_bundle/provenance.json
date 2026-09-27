@@ -1,6 +1,6 @@
 {
   "format": "GVSM-PROVENANCE-v1.0",
-  "job_id": "PRAHL_CHIMNEY",
+  "job_id": "CLIENT_CHIMNEY",
   "timestamp_iso": "2026-09-27T10:58:00Z",
   "geodetic_origin": "44°23'36\"N, 89°49'23\"W (Wisconsin Rapids, WI)",
   "operator": "John Dondlinger (Dondlinger General Contracting)",
@@ -12,11 +12,11 @@
     "DeterministicSVGNamespace"
   ],
   "hashes": {
-    "substrate_photo": "images/prahl_roof_chimney/before_chimney_ridge.jpg",
-    "cutaway_render": "images/prahl_roof_chimney/gvsm_chimney_ridge_cutaway.jpg",
-    "cad_svg_blueprint": "prahl_chimney_bundle/blueprint.svg",
-    "lead_carpenter_cut_schedule": "prahl_chimney_bundle/cut_schedule.json",
-    "menards_store_3107_bom": "prahl_chimney_bundle/menards_bom.json"
+    "substrate_photo": "images/client_roof_chimney/before_chimney_ridge.jpg",
+    "cutaway_render": "images/client_roof_chimney/gvsm_chimney_ridge_cutaway.jpg",
+    "cad_svg_blueprint": "client_chimney_bundle/blueprint.svg",
+    "lead_carpenter_cut_schedule": "client_chimney_bundle/cut_schedule.json",
+    "menards_store_3107_bom": "client_chimney_bundle/menards_bom.json"
   },
   "merkle_root": "e7b99c01f68e9834a35048b8cf441e8c187e148a049d5bf1c2069e2df95c46b1",
   "signature_hmac": "980998fce30bc345ab31d044237db87515152bce811197779d71c4293f9ef215",

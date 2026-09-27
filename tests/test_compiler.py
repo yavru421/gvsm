@@ -24,7 +24,7 @@ class TestGVSMCompiler(unittest.TestCase):
     def setUp(self):
         self.compiler = GVSMCompiler()
         self.test_photo = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..", "images", "chuck_miller_soffit", "before_hvac_cradle.jpg")
+            os.path.join(os.path.dirname(__file__), "..", "images", "client_soffit", "before_hvac_cradle.jpg")
         )
 
     def test_5_layer_prompt_compilation(self):
@@ -51,7 +51,7 @@ class TestGVSMCompiler(unittest.TestCase):
     def test_voice_memo_parsing(self):
         """Verify parsing authentic contractor voice memos extracts materials and scope."""
         memo = (
-            "We're doing Chuck Miller's shop. I want vertical prorib steel panels on the vertical drop "
+            "We're doing the client's shop. I want vertical prorib steel panels on the vertical drop "
             "with J-trim at the bottom. The bottom needs polyiso insulation in a drop grid. Keep the concrete "
             "floor and the overhead ductwork visible, and do a cutaway showing the framing cradle inside."
         )
@@ -65,9 +65,9 @@ class TestGVSMCompiler(unittest.TestCase):
     def test_anti_refeed_guard(self):
         """Verify that passing an AI render filename triggers Anti-Refeed ValidationError."""
         ai_paths = [
-            "images/chuck_miller_soffit/gvsm_soffit_cutaway.jpg",
+            "images/client_soffit/gvsm_soffit_cutaway.jpg",
             "render_output_final.png",
-            "madden_patio_work_pavilion.jpg",
+            "client_patio_work_pavilion.jpg",
             "infographic_diagram.jpg"
         ]
         for path in ai_paths:

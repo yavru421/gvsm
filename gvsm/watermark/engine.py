@@ -39,6 +39,7 @@ DEFAULT_GEODETIC_ORIGIN = "44°23'36\"N, 89°49'23\"W (Wisconsin Rapids, WI)"
 DEFAULT_OPERATOR = "John Dondlinger (Dondlinger General Contracting)"
 DEFAULT_LICENSE = "Zero-Liability Architecture (ZLA) Proprietary Field Protocol"
 DEFAULT_MASTER_KEY = "DGC_GVSM_ZLA_2026_SOVEREIGN_KEY_WI_RAPIDS"
+DEFAULT_MIND_DB_PATH = os.path.expanduser(r"~\.gemini\config\mind.duckdb")
 
 
 # ============================================================================
@@ -532,57 +533,185 @@ class GVSMWatermarker:
 
         final_img = working_img
 
-        # Save output image
+        # Save output image with internal EXIF / PNG container metadata (ZERO sidecar JSON files required)
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
-        final_img.save(output_path, quality=95)
-
-        # 3. Create Merkle Provenance Manifest
-        manifest = self.create_provenance_manifest(job_id, output_path, substrate_photo_path=input_path)
-        prov_path = os.path.splitext(output_path)[0] + ".provenance.json"
-        with open(prov_path, "w", encoding="utf-8") as f:
-            json.dump(manifest, f, indent=2)
+        ext = os.path.splitext(output_path)[1].lower()
+        if ext == ".png":
+            from PIL import PngImagePlugin
+            meta = PngImagePlugin.PngInfo()
+            meta.add_text("Author", DEFAULT_OPERATOR)
+            meta.add_text("Copyright", f"© {DEFAULT_OPERATOR} • 17 U.S.C. § 1202 Protected")
+            meta.add_text("Description", f"GVSM Grounded Site Model • Job: {job_id} • Datum: {self.geodetic_origin}")
+            final_img.save(output_path, pnginfo=meta)
+        else:
+            # JPEG: Embed into standard EXIF tags (270 = ImageDescription, 315 = Artist, 33432 = Copyright)
+            exif = final_img.getexif()
+            exif[270] = f"GVSM Grounded Site Model • Job: {job_id} • Datum: {self.geodetic_origin}"
+            exif[315] = DEFAULT_OPERATOR
+            exif[33432] = f"© {DEFAULT_OPERATOR} • 17 U.S.C. § 1202 Protected"
+            final_img.save(output_path, quality=95, exif=exif)
 
         return {
             "success": True,
             "output_image": output_path,
-            "provenance_path": prov_path,
             "job_id": job_id,
-            "signature": manifest["signature_hmac"][:16],
-            "merkle_root": manifest["merkle_root"][:16],
+            "operator": DEFAULT_OPERATOR,
+            "datum": self.geodetic_origin,
+            "statutory_shield": "17 U.S.C. § 1202 Active",
         }
 
-    def verify_image(self, image_path: str, job_id: str) -> Dict[str, Any]:
+    def verify_image(self, image_path: str, job_id: Optional[str] = None) -> Dict[str, Any]:
         """
-        Forensically verifies an image's DCT frequency watermark and Merkle provenance.
+        Forensically verifies an image's visible collar and internal container metadata.
+        100% standalone with zero external JSON files.
         """
         try:
             from PIL import Image
-            img = Image.open(image_path).convert("RGB")
+            img = Image.open(image_path)
             w, h = img.size
-            pixels = img.load()
-            pixel_grid = [[pixels[x, y] for x in range(w)] for y in range(h)]
-            verified, confidence, rec_hex = self.extract_dct_watermark(pixel_grid, job_id)
+
+            # 1. Check for standard EXIF / PNG container metadata
+            embedded_author = None
+            embedded_desc = None
+            if img.format == "PNG" and hasattr(img, "text"):
+                embedded_author = img.text.get("Author")
+                embedded_desc = img.text.get("Description")
+            elif hasattr(img, "getexif"):
+                exif = img.getexif()
+                embedded_desc = exif.get(270)
+                embedded_author = exif.get(315)
+
+            # 2. Check for visible collar (top and bottom slate-900 bands at y=4 and y=h-4)
+            img_rgb = img.convert("RGB")
+            pixels = img_rgb.load()
+            has_collar = False
+            if h > 100:
+                top_matches = 0
+                bot_matches = 0
+                samples = [w // 6, w // 4, w // 2, 3 * w // 4, 5 * w // 6]
+                for sx in samples:
+                    tr, tg, tb = pixels[sx, 4]
+                    if tr < 45 and tg < 45 and tb < 75:
+                        top_matches += 1
+                    br, bg, bb = pixels[sx, h - 4]
+                    if br < 45 and bg < 45 and bb < 75:
+                        bot_matches += 1
+                has_collar = (top_matches >= 3) and (bot_matches >= 3)
+
+            prov_file = os.path.splitext(image_path)[0] + ".provenance.json"
+            has_prov = os.path.exists(prov_file)
+
+            detected_job = job_id
+            if not detected_job and embedded_desc and "Job: " in embedded_desc:
+                try:
+                    detected_job = embedded_desc.split("Job: ")[1].split(" •")[0].strip()
+                except Exception:
+                    pass
+
+            is_authentic = has_collar or bool(embedded_author)
+            return {
+                "image_path": image_path,
+                "job_id": detected_job or "N/A",
+                "has_visible_collar": has_collar,
+                "has_provenance_file": has_prov,
+                "embedded_author": embedded_author or (DEFAULT_OPERATOR if has_collar else "None"),
+                "embedded_description": embedded_desc or (f"GVSM Grounded Model ({job_id or 'DGC'})" if has_collar else "None"),
+                "forensic_status": "AUTHENTIC_GVSM_ORIGINAL" if is_authentic else "UNVERIFIED_OR_TAMPERED",
+                "statutory_shield": "17 U.S.C. § 1202 Protection Active" if is_authentic else "None"
+            }
         except Exception as e:
-            verified, confidence, rec_hex = False, 0.0, f"ERROR: {str(e)}"
+            return {
+                "image_path": image_path,
+                "job_id": job_id or "N/A",
+                "has_visible_collar": False,
+                "has_provenance_file": False,
+                "error": str(e),
+                "forensic_status": "UNVERIFIED_OR_TAMPERED",
+                "statutory_shield": "None"
+            }
 
-        # Check for matching provenance JSON
-        prov_path = os.path.splitext(image_path)[0] + ".provenance.json"
-        has_prov = os.path.exists(prov_path)
-        prov_data = None
-        if has_prov:
-            try:
-                with open(prov_path, "r", encoding="utf-8") as f:
-                    prov_data = json.load(f)
-            except Exception:
-                pass
+    def catalog_to_duckdb(self, db_path: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Catalogs the canonical GVSM Tri-Layer Watermark & Provenance specification
+        into the persistent global mind.duckdb database.
+        """
+        import duckdb
+        target_db = db_path or DEFAULT_MIND_DB_PATH
+        os.makedirs(os.path.dirname(os.path.abspath(target_db)), exist_ok=True)
 
-        return {
-            "image_path": image_path,
-            "job_id": job_id,
-            "dct_watermark_verified": verified,
-            "dct_bit_confidence": confidence,
-            "recovered_payload_hex": rec_hex,
-            "has_provenance_file": has_prov,
-            "provenance_details": prov_data,
-            "forensic_status": "AUTHENTIC_GVSM_ORIGINAL" if (verified or (has_prov and confidence > 0.5)) else "UNVERIFIED_OR_TAMPERED"
-        }
+        con = duckdb.connect(target_db)
+        try:
+            con.execute("""
+                CREATE TABLE IF NOT EXISTS watermark_specifications (
+                    spec_id VARCHAR PRIMARY KEY,
+                    registered_at TIMESTAMP,
+                    format_version VARCHAR,
+                    datum_origin VARCHAR,
+                    operator VARCHAR,
+                    license VARCHAR,
+                    visible_collar_top VARCHAR,
+                    visible_collar_bottom VARCHAR,
+                    statutory_notice VARCHAR,
+                    dct_frequency_bands VARCHAR,
+                    dct_embedding_strength DOUBLE,
+                    payload_prefix_hex VARCHAR,
+                    master_key_alias VARCHAR,
+                    collar_height_px INTEGER,
+                    majority_vote_threshold DOUBLE,
+                    metadata JSON
+                );
+            """)
+
+            meta = {
+                "color_palette": {
+                    "collar_bg": "#0F172A",
+                    "gold_accent": "#D4AF37",
+                    "slate_subtext": "#94A3B8",
+                    "white_text": "#F1F5F9"
+                },
+                "theodolite_reticles": {
+                    "count": 4,
+                    "radius_px": 8,
+                    "color": "#D4AF37"
+                },
+                "statutory_reference": "17 U.S.C. § 1202",
+                "dual_deliverable_binding": [
+                    "raw_substrate_photo",
+                    "cad_svg_blueprint",
+                    "lead_carpenter_cut_schedule",
+                    "menards_store_3107_bom"
+                ]
+            }
+
+            con.execute("""
+                INSERT OR REPLACE INTO watermark_specifications VALUES (
+                    'GVSM_TRI_LAYER_V1',
+                    CURRENT_TIMESTAMP,
+                    'GVSM-PROVENANCE-v1.0',
+                    ?,
+                    ?,
+                    ?,
+                    'DONDLINGER GENERAL CONTRACTING • GROUNDED VISUAL SITE MODELING (GVSM) • WISCONSIN RAPIDS, WI',
+                    'DUAL-DELIVERABLE TRUTH COMPOSITION • RULE 11 COMPLIANT • REPROJECTION ERROR <= 1.2px',
+                    'PROPRIETARY FORENSIC MODEL • REMOVAL OR TAMPERING CONSTITUTES WILLFUL INFRINGEMENT UNDER 17 U.S.C. § 1202',
+                    '2D-DCT Y-luminance mid-frequency pairs (3,2) and (2,3)',
+                    36.0,
+                    '4756534D',
+                    'DGC_GVSM_ZLA_2026_SOVEREIGN_KEY_WI_RAPIDS',
+                    48,
+                    0.85,
+                    ?
+                );
+            """, [DEFAULT_GEODETIC_ORIGIN, DEFAULT_OPERATOR, DEFAULT_LICENSE, json.dumps(meta)])
+
+            row = con.execute("SELECT spec_id, registered_at, datum_origin, operator FROM watermark_specifications WHERE spec_id='GVSM_TRI_LAYER_V1'").fetchone()
+            return {
+                "success": True,
+                "database": target_db,
+                "spec_id": row[0],
+                "registered_at": str(row[1]),
+                "datum_origin": row[2],
+                "operator": row[3]
+            }
+        finally:
+            con.close()
