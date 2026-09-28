@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GVSM | Grounded Visual Site Modeling Interactive Suite</title>
+  <title>Dondlinger GC | Grounded Visual Site Modeling (GVSM) Interactive Suite</title>
+  <link rel="icon" type="image/svg+xml" href="images/logo/gvsm_seal.svg">
   <style>
     :root {
       --bg: #0a0e14;
@@ -33,34 +34,155 @@
       padding-bottom: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 20px;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .seal-link {
+      display: inline-block;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+      line-height: 0;
+    }
+    .seal-link:hover {
+      transform: scale(1.04);
+    }
+    .brand-seal {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 14px rgba(234, 179, 8, 0.35)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+      flex-shrink: 0;
+    }
+
+    .brand-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .company-pre {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #eab308;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .company-pre span.dot {
+      color: var(--accent);
     }
 
     .brand h1 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+      font-size: 1.65rem;
+      font-weight: 900;
+      letter-spacing: -0.4px;
       color: #fff;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 10px;
+      margin: 1px 0;
     }
     .brand h1 span.tag {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       background: rgba(255, 140, 0, 0.15);
       border: 1px solid var(--accent);
       color: var(--accent-bright);
       padding: 3px 8px;
       border-radius: 4px;
       font-family: var(--mono);
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
-    .brand p {
+    .brand-tagline {
       color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-top: 4px;
+      font-size: 0.88rem;
+    }
+    .brand-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 5px;
+    }
+    .meta-pill {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .meta-pill.gold {
+      border-color: rgba(234, 179, 8, 0.35);
+      color: #fde047;
+      background: rgba(234, 179, 8, 0.08);
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+    .contact-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-contractor-call {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 140, 0, 0.1);
+      border: 1px solid rgba(255, 140, 0, 0.35);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .btn-contractor-call:hover {
+      background: rgba(255, 140, 0, 0.2);
+      border-color: var(--accent);
+      color: var(--accent-bright);
+    }
+    .btn-contractor-call .call-badge {
+      color: var(--accent-bright);
+    }
+    .btn-dgc-portal {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #151d28;
+      border: 1px solid var(--border);
+      color: #38bdf8;
+      padding: 6px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .btn-dgc-portal:hover {
+      background: #1e293b;
+      border-color: #38bdf8;
+      color: #fff;
     }
 
     .project-tabs {
@@ -70,17 +192,19 @@
       padding: 4px;
       border-radius: 8px;
       border: 1px solid var(--border);
+      flex-wrap: wrap;
     }
     .tab-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 8px 16px;
-      font-size: 0.9rem;
+      padding: 8px 14px;
+      font-size: 0.88rem;
       font-weight: 600;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.15s ease;
+      white-space: nowrap;
     }
     .tab-btn:hover {
       color: #fff;
@@ -295,28 +419,121 @@
 
     footer {
       max-width: 1400px;
-      margin: 40px auto 20px;
+      margin: 50px auto 24px;
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
       text-align: center;
+    }
+    .footer-seal-wrap {
+      display: flex;
+      justify-content: center;
+    }
+    .footer-seal {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 16px rgba(234, 179, 8, 0.35)) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.9));
+      transition: transform 0.2s ease;
+    }
+    .footer-seal:hover {
+      transform: scale(1.05);
+    }
+    .footer-contractor-card {
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .footer-company-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+    .contractor-title {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: #eab308;
+      font-weight: 700;
+    }
+    .contractor-geo {
       font-size: 0.85rem;
       color: var(--text-muted);
-      border-top: 1px solid var(--border);
-      padding-top: 20px;
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 8px 0;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+    }
+    .footer-link {
+      color: #38bdf8;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .footer-link:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+    .footer-dot {
+      color: #475569;
+    }
+    .footer-legal {
+      font-size: 0.78rem;
+      color: #64748b;
+      line-height: 1.5;
+      max-width: 780px;
+      margin-top: 6px;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand">
-      <h1>GVSM <span class="tag">RULE 11 COMPLIANT</span></h1>
-      <p>Grounded Visual Site Modeling &bull; Zero-Hallucination Dual-Deliverable Engine</p>
+    <div class="brand-container">
+      <a href="https://dondlingergc.com" class="seal-link" title="Dondlinger General Contracting — Home">
+        <img src="images/logo/gvsm_seal.svg" alt="Dondlinger GC - GVSM Certified Seal" class="brand-seal">
+      </a>
+      <div class="brand-info">
+        <div class="company-pre">DONDLINGER GENERAL CONTRACTING <span class="dot">&bull;</span> WISCONSIN RAPIDS, WI</div>
+        <div class="brand">
+          <h1>GROUNDED VISUAL SITE MODELING <span class="tag">RULE 11 DUAL-DELIVERABLE</span></h1>
+        </div>
+        <p class="brand-tagline">Zero-Hallucination Architectural Pre-Visualization &bull; Client Excitement + Millimeter CAD Truth</p>
+        <div class="brand-meta">
+          <span class="meta-pill gold">★ DGC CERTIFIED CRAFTSMANSHIP</span>
+          <span class="meta-pill">DSPS CE &amp; CODE COMPLIANT</span>
+          <span class="meta-pill">SUBSTRATE ANCHORED</span>
+        </div>
+      </div>
     </div>
-    <div class="project-tabs">
-      <button class="tab-btn active" onclick="switchProject('hvac')">Client HVAC</button>
-      <button class="tab-btn" onclick="switchProject('stairs')">Client Stairs</button>
-      <button class="tab-btn" onclick="switchProject('patio')">Client Patio Canopy</button>
-      <button class="tab-btn" onclick="switchProject('chimney')">Client Roof Chimney</button>
-      <button class="tab-btn" onclick="switchProject('landing')">Client Deck Landing</button>
+    <div class="header-right">
+      <div class="contact-actions">
+        <a href="tel:7154593050" class="btn-contractor-call" title="Call John Dondlinger Direct">
+          <span class="call-badge">📞</span>
+          <span>(715) 459-3050</span>
+        </a>
+        <a href="https://dondlingergc.com" class="btn-dgc-portal" target="_blank" rel="noopener" title="Visit Main DGC Contracting Portal">
+          <span>DondlingerGC.com</span>
+          <span>↗</span>
+        </a>
+      </div>
+      <div class="project-tabs">
+        <button class="tab-btn active" onclick="switchProject('hvac')">Client HVAC Soffit</button>
+        <button class="tab-btn" onclick="switchProject('stairs')">Client Stairs</button>
+        <button class="tab-btn" onclick="switchProject('patio')">Client Patio Canopy</button>
+        <button class="tab-btn" onclick="switchProject('chimney')">Client Roof Chimney</button>
+        <button class="tab-btn" onclick="switchProject('landing')">Client Deck Landing</button>
+      </div>
     </div>
   </header>
 
@@ -385,7 +602,26 @@
   </main>
 
   <footer>
-    Metropolis Zero-Liability Architecture &bull; Grounded Visual Site Modeling &bull; Pair-Engineered by John Dondlinger &amp; Antigravity
+    <div class="footer-seal-wrap">
+      <a href="https://dondlingergc.com" class="seal-link" title="Dondlinger General Contracting">
+        <img src="images/logo/gvsm_seal.svg" alt="Dondlinger GC Official Seal" class="footer-seal">
+      </a>
+    </div>
+    <div class="footer-contractor-card">
+      <h3 class="footer-company-name">Dondlinger General Contracting LLC</h3>
+      <p class="contractor-title">John Dondlinger &bull; Certified Journeyman Carpenter &bull; General Contractor</p>
+      <p class="contractor-geo">Wisconsin Rapids, WI &bull; Serving Wood, Portage &amp; Adams Counties</p>
+      <div class="footer-links">
+        <a href="tel:7154593050" class="footer-link">Direct: (715) 459-3050</a>
+        <span class="footer-dot">&bull;</span>
+        <a href="mailto:dondlingergeneralcontracting@gmail.com" class="footer-link">dondlingergeneralcontracting@gmail.com</a>
+        <span class="footer-dot">&bull;</span>
+        <a href="https://dondlingergc.com" class="footer-link" target="_blank" rel="noopener">dondlingergc.com</a>
+      </div>
+      <p class="footer-legal">
+        Grounded Visual Site Modeling (GVSM) is a proprietary pre-construction and forensic visualization pipeline of Dondlinger General Contracting. All visual models anchor directly to authentic physical site substrates under Metropolis Rule 11 Dual-Deliverable specifications (Wisconsin SPS 321.28 &amp; CSI MasterFormat standards).
+      </p>
+    </div>
   </footer>
 
   <script>
