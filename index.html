@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GVSM | Grounded Visual Site Modeling Interactive Suite</title>
+  <style>
+    :root {
+      --bg: #0a0e14;
+      --card-bg: #121820;
+      --border: #223040;
+      --accent: #ff8c00;
+      --accent-bright: #ffa500;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    header {
+      max-width: 1400px;
+      margin: 0 auto 28px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand h1 span.tag {
+      font-size: 0.75rem;
+      background: rgba(255, 140, 0, 0.15);
+      border: 1px solid var(--accent);
+      color: var(--accent-bright);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-weight: 600;
+    }
+    .brand p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    .project-tabs {
+      display: flex;
+      gap: 8px;
+      background: #0f141c;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover {
+      color: #fff;
+    }
+    .tab-btn.active {
+      background: var(--card-bg);
+      color: var(--accent-bright);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    /* Comparison Area */
+    .showcase-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      padding: 24px;
+    }
+
+    .card-header {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .card-title h2 {
+      font-size: 1.35rem;
+      color: #fff;
+    }
+    .card-title p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .badge-bar {
+      display: flex;
+      gap: 8px;
+    }
+    .badge {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      background: #1a222d;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .badge.highlight {
+      border-color: rgba(255, 140, 0, 0.4);
+      color: var(--accent-bright);
+    }
+
+    /* Split Slider */
+    .slider-viewport {
+      position: relative;
+      width: 100%;
+      height: 580px;
+      border-radius: 8px;
+      overflow: hidden;
+      user-select: none;
+      background: #000;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .slider-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .slider-after-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      border-right: 2px solid var(--accent);
+    }
+    .slider-after-container .slider-img {
+      width: 100%;
+      height: 100%;
+      /* Will be dynamically resized in JS to maintain 1:1 image alignment */
+    }
+    .slider-handle {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+      cursor: ew-resize;
+      z-index: 10;
+      transform: translateX(-50%);
+    }
+    .slider-handle-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      background: #ff8c00;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    }
+
+    .pill-label {
+      position: absolute;
+      bottom: 16px;
+      padding: 6px 14px;
+      background: rgba(10, 14, 20, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      z-index: 5;
+      backdrop-filter: blur(4px);
+    }
+    .pill-left { left: 16px; color: var(--accent-bright); }
+    .pill-right { right: 16px; color: #88c0d0; }
+
+    /* Dual Deliverable Grid */
+    .dual-deliverable-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    @media (max-width: 960px) {
+      .dual-deliverable-grid { grid-template-columns: 1fr; }
+      .slider-viewport { height: 380px; }
+    }
+
+    .deliverable-col {
+      background: #0d1219;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .deliverable-col h3 {
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .deliverable-col h3 span {
+      font-size: 0.75rem;
+      font-family: var(--mono);
+      color: var(--text-muted);
+    }
+
+    /* Prompt Layers Box */
+    .layer-box {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      background: #080c10;
+      padding: 16px;
+      border-radius: 6px;
+      border: 1px solid #1a222d;
+      color: #c9d1d9;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .layer-tag {
+      color: var(--accent-bright);
+      font-weight: 700;
+    }
+
+    /* CAD Blueprint Viewer */
+    .cad-viewer-container {
+      background: #080c10;
+      border: 1px solid #1a222d;
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 380px;
+      overflow-x: auto;
+    }
+    .cad-viewer-container svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    footer {
+      max-width: 1400px;
+      margin: 40px auto 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>GVSM <span class="tag">RULE 11 COMPLIANT</span></h1>
+      <p>Grounded Visual Site Modeling &bull; Zero-Hallucination Dual-Deliverable Engine</p>
+    </div>
+    <div class="project-tabs">
+      <button class="tab-btn active" onclick="switchProject('hvac')">Client HVAC</button>
+      <button class="tab-btn" onclick="switchProject('stairs')">Client Stairs</button>
+      <button class="tab-btn" onclick="switchProject('patio')">Client Patio Canopy</button>
+      <button class="tab-btn" onclick="switchProject('chimney')">Client Roof Chimney</button>
+      <button class="tab-btn" onclick="switchProject('landing')">Client Deck Landing</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="showcase-card">
+      <div class="card-header">
+        <div class="card-title">
+          <h2 id="proj-title">Client Shop &bull; Suspended HVAC Soffit</h2>
+          <p id="proj-desc">Industrial 2x4 framing cradle built around commercial spiral ducting and unit heater.</p>
+        </div>
+        <div class="badge-bar">
+          <span class="badge highlight">PHYSICAL SUBSTRATE ANCHORED</span>
+          <span class="badge">ANTI-REFEED PASS</span>
+          <span class="badge" id="proj-dim">48" W &times; 32" DROP</span>
+        </div>
+      </div>
+
+      <!-- Interactive Split-Screen Curtain Slider -->
+      <div class="slider-viewport" id="slider-viewport">
+        <!-- Under image (Raw Substrate Before) -->
+        <img id="img-before" class="slider-img" src="images/client_soffit/before_hvac_cradle.jpg" alt="Before Substrate">
+        
+        <!-- Over image (GVSM Render After) in clipped container -->
+        <div class="slider-after-container" id="slider-after-container">
+          <img id="img-after" class="slider-img" src="images/client_soffit/gvsm_soffit_cutaway.jpg" alt="GVSM Visualization">
+        </div>
+
+        <!-- Draggable divider handle -->
+        <div class="slider-handle" id="slider-handle">
+          <div class="slider-handle-circle">&harr;</div>
+        </div>
+
+        <div class="pill-label pill-left">AFTER: GVSM PERSUASIVE CUTAWAY</div>
+        <div class="pill-label pill-right">BEFORE: AUTHENTIC SITE SUBSTRATE</div>
+      </div>
+
+      <!-- Dual Deliverable Breakdown: 5-Layer Prompt vs Deterministic CAD -->
+      <div class="dual-deliverable-grid">
+        <!-- Layer 1: Prompt Specification -->
+        <div class="deliverable-col">
+          <h3>
+            Layer A: Customer Excitement &amp; Visual Intent
+            <span>5-LAYER COMPILED SPEC</span>
+          </h3>
+          <div class="layer-box" id="prompt-layers-box">
+            <div><span class="layer-tag">[SUBSTRATE GROUNDING]:</span> Maintain authentic existing concrete floor, overhead metal trusses, spiral ductwork, and unit heater exactly as photographed without alteration.</div>
+            <div><span class="layer-tag">[CLADDING & PROFILES]:</span> Vertical Bright White 29-gauge Pro-Rib ribbed steel liner panels on the exterior face of the lower vertical soffit drop, secured with color-matched hex washer screws on rib flats. White J-trim perimeter capping along bottom edge.</div>
+            <div><span class="layer-tag">[FINISH ASSEMBLIES]:</span> Flush suspended 15/16" Classic X white ceiling grid holding 1" foil-faced polyisocyanurate insulation panels with clean taped foil seams facing down.</div>
+            <div><span class="layer-tag">[ARCHITECTURAL CUTAWAY]:</span> Cutaway reveals internal rough-in: framing cradle consisting of 2x4 SPF top and bottom plates, vertical studs at 16" OC, spiral duct run, and commercial unit heater suspended on threaded rods.</div>
+            <div><span class="layer-tag">[MACRO DETAIL INSET]:</span> Zoom inset circle at corner joint showing J-trim receiver channel, neoprene washer fastener penetration, and clean drip edge.</div>
+          </div>
+        </div>
+
+        <!-- Layer 2: Deterministic Inline SVG CAD Blueprint -->
+        <div class="deliverable-col">
+          <h3>
+            Layer B: Crew Fabrication &amp; Dimensional Truth
+            <span>DETERMINISTIC VECTOR CAD</span>
+          </h3>
+          <div class="cad-viewer-container" id="cad-viewer">
+            <!-- Inline SVG inserted by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Metropolis Zero-Liability Architecture &bull; Grounded Visual Site Modeling &bull; Pair-Engineered by John Dondlinger &amp; Antigravity
+  </footer>
+
+  <script>
+    // Project Dataset
+    const projects = {
+      hvac: {
+        title: "Client Shop \u2022 Suspended HVAC Soffit",
+        desc: "Industrial 2x4 framing cradle built around commercial spiral ducting and unit heater.",
+        dim: '48" W \u00d7 32" DROP',
+        before: "images/client_soffit/before_hvac_cradle.jpg",
+        after: "images/client_soffit/gvsm_soffit_cutaway.jpg",
+        layers: [
+          { tag: "[SUBSTRATE GROUNDING]", text: "Maintain authentic existing concrete floor, overhead metal trusses, spiral ductwork, and unit heater exactly as photographed without alteration. Built onto the exact 2x4 framing cradle shown in the reference image." },
+          { tag: "[CLADDING & PROFILES]", text: "Vertical Bright White 29-gauge Pro-Rib ribbed steel liner panels on the exterior face of the lower vertical soffit drop, secured with color-matched hex washer screws on rib flats. White J-trim perimeter capping along bottom edge." },
+          { tag: "[FINISH ASSEMBLIES]", text: "Flush suspended 15/16\" Classic X white ceiling grid holding 1\" foil-faced polyisocyanurate insulation panels with clean taped foil seams facing down." },
+          { tag: "[ARCHITECTURAL CUTAWAY]", text: "Cutaway reveals internal rough-in: framing cradle consisting of 2x4 SPF top and bottom plates, vertical studs at 16\" OC, spiral duct run, and commercial unit heater suspended on threaded rods." },
+          { tag: "[MACRO DETAIL INSET]", text: "Zoom inset circle at corner joint showing J-trim receiver channel, neoprene washer fastener penetration, and clean drip edge." }
+        ],
+        svg: `<svg viewBox="0 0 700 450" width="100%" height="320" xmlns="http://www.w3.org/2000/svg">
+          <style>
+            .cad-bg { fill: #0b0f14; }
+            .cad-grid { stroke: #182230; stroke-width: 1; }
+            .cad-dim { stroke: #ff8c00; stroke-width: 1.5; font-family: monospace; font-size: 11px; fill: #ff8c00; }
+            .cad-framing { stroke: #e6a15c; stroke-width: 2.5; fill: rgba(230,161,92,0.15); }
+            .cad-duct { stroke: #88c0d0; stroke-width: 2; fill: rgba(136,192,208,0.1); stroke-dasharray: 4,4; }
+            .cad-prorib { stroke: #ffffff; stroke-width: 3; fill: none; }
+            .cad-jtrim { stroke: #ff3333; stroke-width: 3; }
+            .cad-text { font-family: monospace; font-size: 11px; fill: #c9d1d9; }
+          </style>
+          <rect width="700" height="450" class="cad-bg" />
+          <!-- Framing Cradle -->
+          <rect x="140" y="80" width="400" height="240" class="cad-framing" />
+          <line x1="140" y1="80" x2="540" y2="80" stroke="#e6a15c" stroke-width="4" />
+          <line x1="140" y1="320" x2="540" y2="320" stroke="#e6a15c" stroke-width="4" />
+          <line x1="273" y1="80" x2="273" y2="320" class="cad-framing" stroke-dasharray="3,3" />
+          <line x1="406" y1="80" x2="406" y2="320" class="cad-framing" stroke-dasharray="3,3" />
+          <!-- Spiral Duct -->
+          <circle cx="340" cy="200" r="70" class="cad-duct" />
+          <text x="340" y="205" text-anchor="middle" class="cad-text" fill="#88c0d0">&Oslash;12" SPIRAL DUCT</text>
+          <!-- Pro-Rib Vertical Facing -->
+          <line x1="135" y1="80" x2="135" y2="325" class="cad-prorib" />
+          <path d="M 135 325 L 145 325 L 145 320" class="cad-jtrim" fill="none" />
+          <text x="120" y="210" class="cad-text" transform="rotate(-90 120 210)" text-anchor="middle">29ga PRO-RIB PANEL</text>
+          <!-- Grid Underside -->
+          <line x1="140" y1="325" x2="540" y2="325" stroke="#ffffff" stroke-width="2" />
+          <text x="340" y="348" text-anchor="middle" class="cad-text">15/16" CLASSIC X GRID + 1" POLYISO</text>
+          <!-- Dimensions -->
+          <line x1="140" y1="50" x2="540" y2="50" class="cad-dim" />
+          <line x1="140" y1="45" x2="140" y2="55" class="cad-dim" />
+          <line x1="540" y1="45" x2="540" y2="55" class="cad-dim" />
+          <text x="340" y="42" text-anchor="middle" class="cad-dim">48.0" OVERALL SOFFIT WIDTH</text>
+          <line x1="565" y1="80" x2="565" y2="320" class="cad-dim" />
+          <line x1="560" y1="80" x2="570" y2="80" class="cad-dim" />
+          <line x1="560" y1="320" x2="570" y2="320" class="cad-dim" />
+          <text x="580" y="205" class="cad-dim">32.0" DROP</text>
+        </svg>`
+      },
+      stairs: {
+        title: "Client Residence \u2022 Basement Staircase Remodel",
+        desc: "Precision stair rake, 2x12 Cedartone treads, satin white risers, and code-compliant 80\" minimum headroom line.",
+        dim: '85.25" TOTAL RISE \u2022 11 RISERS',
+        before: "images/client_stairs/before_descent.jpg",
+        after: "images/client_stairs/gvsm_descent.jpg",
+        layers: [
+          { tag: "[SUBSTRATE GROUNDING]", text: "Maintain authentic existing hallway drywall corridor, doorway opening, and floor framing exactly as photographed without alteration." },
+          { tag: "[CLADDING & PROFILES]", text: "Solid 2x12 Cedartone wood treads with bullnosed front edge overhang, crisp satin white risers, and matching Cedartone skirtboard stringer trim." },
+          { tag: "[FINISH ASSEMBLIES]", text: "Modern 2x2 craftsman-profile stained wood handrail mounted at 36-inch height with 90-degree code-compliant wall returns." },
+          { tag: "[ARCHITECTURAL CUTAWAY]", text: "Cutaway through side wall framing showing triple 2x12 Douglas Fir stringer carriages at 12\" OC, structural bottom heel bracket, and upper floor joist hanger interface." },
+          { tag: "[MACRO DETAIL INSET]", text: "Microscopic zoom showing 1-inch tread nosing projection with polyurethane adhesive bead and countersunk trim-head screw plugs." }
+        ],
+        svg: `<svg viewBox="0 0 700 450" width="100%" height="320" xmlns="http://www.w3.org/2000/svg">
+          <style>
+            .cad-bg { fill: #0b0f14; }
+            .cad-dim { stroke: #ff8c00; stroke-width: 1.5; font-family: monospace; font-size: 11px; fill: #ff8c00; }
+            .cad-stair { stroke: #e6a15c; stroke-width: 2.5; fill: none; }
+            .cad-headroom { stroke: #ff3333; stroke-width: 1.5; stroke-dasharray: 5,4; }
+            .cad-text { font-family: monospace; font-size: 11px; fill: #c9d1d9; }
+          </style>
+          <rect width="700" height="450" class="cad-bg" />
+          <!-- Stair Profile -->
+          <path d="M 80 400 L 125 400 L 125 365 L 170 365 L 170 330 L 215 330 L 215 295 L 260 295 L 260 260 L 305 260 L 305 225 L 350 225 L 350 190 L 395 190 L 395 155 L 440 155 L 440 120 L 485 120 L 485 85 L 530 85" class="cad-stair" />
+          <!-- Bulkhead Header -->
+          <rect x="260" y="50" width="70" height="40" fill="#223040" stroke="#88c0d0" stroke-width="1.5" />
+          <text x="295" y="75" text-anchor="middle" class="cad-text" fill="#88c0d0">BULKHEAD</text>
+          <!-- 80" Minimum Headroom Line -->
+          <line x1="260" y1="90" x2="260" y2="260" class="cad-headroom" />
+          <text x="265" y="175" class="cad-dim" fill="#ff3333">&ge; 80.0" CODE HEADROOM</text>
+          <!-- Dimensions -->
+          <line x1="560" y1="85" x2="560" y2="400" class="cad-dim" />
+          <line x1="555" y1="85" x2="565" y2="85" class="cad-dim" />
+          <line x1="555" y1="400" x2="565" y2="400" class="cad-dim" />
+          <text x="575" y="245" class="cad-dim">85.25" TOTAL RISE (11 &times; 7.75")</text>
+          <line x1="80" y1="425" x2="530" y2="425" class="cad-dim" />
+          <text x="305" y="440" text-anchor="middle" class="cad-dim">105.0" TOTAL RUN (10 &times; 10.5")</text>
+        </svg>`
+      },
+      patio: {
+        title: "Client Property \u2022 Outdoor Canopy & Work Pavilion",
+        desc: "Sheltered outdoor workspace bounded by stamped patio slab, cedar fence, and home wall.",
+        dim: '16\' \u00d7 12\' COVERAGE',
+        before: "images/client_patio/before_patio.jpg",
+        after: "images/client_patio/gvsm_work_pavilion.jpg",
+        layers: [
+          { tag: "[SUBSTRATE GROUNDING]", text: "Maintain authentic existing red 9-lite entry door, stamped concrete patio slab, dark cedar privacy fence, and exterior vinyl siding exactly as photographed without alteration." },
+          { tag: "[CLADDING & PROFILES]", text: "Heavy timber posts (6x6 cedar) with low-pitch architectural canopy roof. Semi-translucent bronze polycarbonate roof panels allowing soft diffused light while shedding rain." },
+          { tag: "[FINISH ASSEMBLIES]", text: "Integrated aluminum perimeter gutters with downspout directing drainage away from stamped slab perimeter. Eased rafter tails." },
+          { tag: "[ARCHITECTURAL CUTAWAY]", text: "Cutaway showing heavy duty Simpson Strong-Tie post bases anchored into footing, 2x8 double rafter beams, and hurricane tie brackets at each purlin." },
+          { tag: "[MACRO DETAIL INSET]", text: "Zoom inset showing neoprene gasket glazing bars securing polycarbonate sheets to prevent thermal expansion rattling." }
+        ],
+        svg: `<svg viewBox="0 0 700 450" width="100%" height="320" xmlns="http://www.w3.org/2000/svg">
+          <style>
+            .cad-bg { fill: #0b0f14; }
+            .cad-dim { stroke: #ff8c00; stroke-width: 1.5; font-family: monospace; font-size: 11px; fill: #ff8c00; }
+            .cad-beam { stroke: #e6a15c; stroke-width: 3; fill: rgba(230,161,92,0.15); }
+            .cad-roof { stroke: #88c0d0; stroke-width: 2.5; fill: rgba(136,192,208,0.2); }
+            .cad-text { font-family: monospace; font-size: 11px; fill: #c9d1d9; }
+          </style>
+          <rect width="700" height="450" class="cad-bg" />
+          <!-- House Wall Substrate -->
+          <rect x="80" y="60" width="30" height="340" fill="#223040" stroke="#334455" />
+          <text x="65" y="230" class="cad-text" transform="rotate(-90 65 230)" text-anchor="middle">HOUSE SUBSTRATE WALL</text>
+          <!-- Posts -->
+          <rect x="480" y="160" width="24" height="240" class="cad-beam" />
+          <!-- Roof Line -->
+          <polygon points="110,120 520,160 515,175 110,135" class="cad-roof" />
+          <text x="315" y="130" text-anchor="middle" class="cad-text" fill="#88c0d0">BRONZE POLYCARBONATE ROOF (3:12 PITCH)</text>
+          <!-- Patio Slab Ground -->
+          <line x1="80" y1="400" x2="620" y2="400" stroke="#778899" stroke-width="4" />
+          <text x="350" y="425" text-anchor="middle" class="cad-text">EXISTING STAMPED CONCRETE PATIO SLAB</text>
+          <!-- Dimensions -->
+          <line x1="110" y1="90" x2="490" y2="90" class="cad-dim" />
+          <line x1="110" y1="85" x2="110" y2="95" class="cad-dim" />
+          <text x="300" y="80" text-anchor="middle" class="cad-dim">12'-0" CANOPY PROJECTION</text>
+        </svg>`
+      },
+      chimney: {
+        title: "Client Property \u2022 Rebuilt Expanded Chimney Elevation",
+        desc: "Wisconsin SPS 321.28 compliant masonry rebuild with repeating architectural soldier courses and cast wash crown.",
+        dim: '32" W \u00d7 24" D \u00d7 54" HEIGHT',
+        before: "images/client_roof_chimney/before_chimney_ridge.jpg",
+        after: "images/client_roof_chimney/gvsm_chimney_ridge_cutaway.jpg",
+        layers: [
+          { tag: "[SUBSTRATE GROUNDING]", text: "Maintain authentic multi-tone architectural roof shingles, 6:12 pitch, ridge profile, and background tree canopy exactly as photographed. Anchor expanded masonry directly to existing roof penetration framing." },
+          { tag: "[CLADDING & PROFILES]", text: "Standard modular red clay facing brick expanded to 32\" width by 24\" depth. Architectural soldier courses (bricks standing vertically on end) repeating every three running bond courses with crisp mortar joints." },
+          { tag: "[FINISH ASSEMBLIES]", text: "Overhanging cast-in-place reinforced concrete wash crown with undercut drip edge, 8x12 vitrified terracotta clay flue liner protruding 4 inches, and continuous 26-gauge prepainted steel counter-flashing." },
+          { tag: "[ARCHITECTURAL CUTAWAY]", text: "Corner cutaway reveals inner 8x12 vitrified clay flue tile liner, 2-inch non-combustible thermal airspace, structural masonry ties, and 26-gauge step flashing interwoven with each shingle course." },
+          { tag: "[MACRO DETAIL INSET]", text: "Circular 10x magnified architectural detail callout showing lead-free 26-gauge step flashing and reglet saw-cut counter flashing sealed with MasterSeal NP1 polyurethane bead." }
+        ],
+        svg: `<svg viewBox="0 0 700 600" width="100%" height="340" xmlns="http://www.w3.org/2000/svg">
+          <style>
+            .cad-bg { fill: #0f172a; }
+            .cad-dim { stroke: #38bdf8; stroke-width: 1.5; font-family: monospace; font-size: 11px; fill: #38bdf8; }
+            .cad-roof { stroke: #64748b; stroke-width: 5; fill: none; }
+            .cad-flashing { stroke: #cbd5e1; stroke-width: 3; stroke-dasharray: 6,4; fill: none; }
+            .cad-crown { fill: #475569; stroke: #94a3b8; stroke-width: 2; rx: 2; }
+            .cad-flue { fill: #c2410c; stroke: #ea580c; stroke-width: 2; }
+            .cad-brick-run { fill: #991b1b; stroke: #7f1d1d; stroke-width: 1; }
+            .cad-brick-sld { fill: #b91c1c; stroke: #fca5a5; stroke-width: 1.5; }
+            .cad-joint { stroke: #450a0a; stroke-width: 0.8; }
+            .cad-text { font-family: monospace; font-size: 11px; fill: #94a3b8; }
+          </style>
+          <rect width="700" height="600" class="cad-bg" rx="8" />
+          <text x="30" y="35" fill="#38bdf8" font-size="15" font-weight="bold">DGC ARCHITECTURAL BLUEPRINT — EXPANDED CHIMNEY ELEVATION</text>
+          <text x="30" y="55" class="cad-text">Masonry Scope: 32.0"W x 24.0"D x 54.0"H | Soldier Course every 3 courses | SPS 321.28 Code</text>
+          <line x1="50" y1="400" x2="650" y2="320" class="cad-roof" />
+          <text x="50" y="425" class="cad-text">SLOPED ROOF LINE (6:12 PITCH)</text>
+          <line x1="255" y1="385" x2="445" y2="355" class="cad-flashing" />
+          <text x="245" y="405" fill="#cbd5e1" font-size="10" text-anchor="end">26ga Step &amp; Counter Flashing</text>
+          <rect x="325" y="75" width="50" height="25" class="cad-flue" />
+          <text x="350" y="90" fill="#fdba74" font-size="9" text-anchor="middle">Clay Flue Liner</text>
+          <rect x="258" y="90" width="184" height="16" class="cad-crown" />
+          <text x="350" y="102" fill="#f1f5f9" font-size="10" text-anchor="middle" font-weight="bold">REINFORCED CONCRETE WASH CROWN (DRIP EDGE)</text>
+          <!-- Brick Courses -->
+          <rect x="270" y="356" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="342" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="328" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="315" width="160" height="14" class="cad-brick-sld" />
+          <rect x="270" y="301" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="287" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="273" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="260" width="160" height="14" class="cad-brick-sld" />
+          <rect x="270" y="246" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="232" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="218" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="205" width="160" height="14" class="cad-brick-sld" />
+          <rect x="270" y="191" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="177" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="163" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="150" width="160" height="14" class="cad-brick-sld" />
+          <rect x="270" y="136" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="122" width="160" height="14" class="cad-brick-run" />
+          <rect x="270" y="108" width="160" height="14" class="cad-brick-run" />
+          <!-- Dimensions -->
+          <line x1="240" y1="100" x2="240" y2="370" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="235" y="235" fill="#38bdf8" font-size="11" text-anchor="end">54.0" HEIGHT</text>
+          <line x1="270" y1="440" x2="430" y2="440" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="350" y="455" fill="#38bdf8" font-size="11" text-anchor="middle">32.0" WIDTH (EXPANDED FOOTPRINT)</text>
+          <!-- SPS 321.28 Compliance Note -->
+          <rect x="430" y="70" width="240" height="45" fill="#1e293b" stroke="#22c55e" stroke-width="1" rx="4" />
+          <text x="440" y="88" fill="#4ade80" font-size="10" font-weight="bold">WISCONSIN SPS 321.28 COMPLIANT</text>
+          <text x="440" y="103" class="cad-text">Height &gt; 3ft above roof penetration</text>
+        </svg>`
+      },
+      landing: {
+        title: "Client Residence \u2022 Standalone Deck Landing & Stairs",
+        desc: "Precision 47-3/4\" \u00d7 48\" AC2 CedarTone 2x6 standalone platform on Simpson ABU44 post bases with straight-line egress stair run.",
+        dim: '47-3/4" W \u00d7 48" D \u2022 3-STEP STAIRS',
+        before: "images/client_landing/before_landing.jpg",
+        after: "images/client_landing/gvsm_landing_cutaway.jpg",
+        layers: [
+          { tag: "[SUBSTRATE GROUNDING]", text: "Maintain authentic beige vinyl siding, maroon entry door, foundation, and poured concrete walkway pad exactly as photographed without alteration." },
+          { tag: "[CLADDING & PROFILES]", text: "Standalone 47-3/4\" wide by 48\" deep landing platform framed with AC2 CedarTone 2x6 treated lumber, elevated on plumb 4x4 CedarTone posts set in Simpson Strong-Tie ABU44 galvanized post bases mechanically anchored to concrete pad." },
+          { tag: "[FINISH ASSEMBLIES]", text: "Full 2x6 CedarTone deck boards sitting dead-flush with outside rims. Outside-mounted 4x4 railing posts with 2x4 sub-rails, vertical 2x2 balusters (<4\" gap), and signature continuous flat 2x6 drink-rail top cap. Aluminum Z-flashing and solid PVC sill trim beneath threshold." },
+          { tag: "[ARCHITECTURAL CUTAWAY]", text: "Decking peels back to reveal internal 16\" o.c. 2x6 joists flush with cap and side rims, supported by Simpson Strong-Tie Z-Max joist hangers and GRK structural lags." },
+          { tag: "[MACRO DETAIL INSET]", text: "Zoom inset circle at corner joint showing 1:1 cross-section of flush deck-to-rim joint, through-bolted 4x4 post, and Simpson ABU44 anchor into poured concrete." }
+        ],
+        svg: `<svg viewBox="0 0 740 230" width="100%" height="340" xmlns="http://www.w3.org/2000/svg" style="background: #090d16; border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">
+          <defs>
+            <marker id="arr-landing" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#38bdf8"/>
+            </marker>
+            <marker id="arr-amber-landing" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#fbbf24"/>
+            </marker>
+          </defs>
+          <rect x="5" y="5" width="730" height="220" fill="none" stroke="#1e293b" stroke-width="1"/>
+          <line x1="365" y1="5" x2="365" y2="225" stroke="#1e293b" stroke-width="1" stroke-dasharray="2,2"/>
+          <!-- LEFT SIDE: PLAN VIEW -->
+          <text x="15" y="20" fill="#38bdf8" font-size="8.5" font-weight="700">VIEW A-A: PLAN VIEW &bull; 4'x4' LANDING + STAIRS</text>
+          <!-- House Wall -->
+          <rect x="15" y="38" width="10" height="110" fill="#334155" stroke="#475569"/>
+          <text x="22" y="93" fill="#94a3b8" font-size="7" transform="rotate(-90 22 93)">WALL</text>
+          <!-- Landing Box -->
+          <rect x="25" y="38" width="110" height="110" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+          <text x="35" y="58" fill="#f8fafc" font-size="8" font-weight="700">4'x4' LANDING</text>
+          <text x="35" y="70" fill="#38bdf8" font-size="7">Full 2x6 Decking (47-3/4"x48")</text>
+          <line x1="52" y1="38" x2="52" y2="148" stroke="#334155" stroke-dasharray="2,2"/>
+          <line x1="80" y1="38" x2="80" y2="148" stroke="#334155" stroke-dasharray="2,2"/>
+          <line x1="108" y1="38" x2="108" y2="148" stroke="#334155" stroke-dasharray="2,2"/>
+          <!-- Stairs (3 Steps) -->
+          <rect x="135" y="46" width="25" height="94" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+          <rect x="160" y="46" width="25" height="94" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+          <rect x="185" y="46" width="25" height="94" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+          <text x="143" y="93" fill="#94a3b8" font-size="6.5" transform="rotate(90 143 93)">Double 2x6</text>
+          <text x="168" y="93" fill="#94a3b8" font-size="6.5" transform="rotate(90 168 93)">Double 2x6</text>
+          <text x="193" y="93" fill="#94a3b8" font-size="6.5" transform="rotate(90 193 93)">Double 2x6</text>
+          <!-- Posts in Simpson Bases -->
+          <rect x="23" y="36" width="8" height="8" fill="#38bdf8"/>
+          <rect x="23" y="142" width="8" height="8" fill="#38bdf8"/>
+          <rect x="131" y="36" width="8" height="8" fill="#38bdf8"/>
+          <rect x="131" y="142" width="8" height="8" fill="#38bdf8"/>
+          <rect x="206" y="44" width="8" height="8" fill="#fbbf24"/>
+          <rect x="206" y="134" width="8" height="8" fill="#fbbf24"/>
+          <!-- Plan Dimensions -->
+          <line x1="25" y1="30" x2="135" y2="30" stroke="#38bdf8" stroke-width="0.8" marker-start="url(#arr-landing)" marker-end="url(#arr-landing)"/>
+          <text x="80" y="26" fill="#38bdf8" font-size="7" text-anchor="middle" font-weight="700">47-3/4" LANDING</text>
+          <line x1="135" y1="30" x2="210" y2="30" stroke="#fbbf24" stroke-width="0.8" marker-start="url(#arr-amber-landing)" marker-end="url(#arr-amber-landing)"/>
+          <text x="172" y="26" fill="#fbbf24" font-size="7" text-anchor="middle" font-weight="700">33" STAIR RUN</text>
+          <!-- Plan Callout Notes -->
+          <rect x="15" y="156" width="335" height="60" fill="#1e293b" rx="3" stroke="#334155"/>
+          <text x="22" y="170" fill="#38bdf8" font-size="7" font-weight="700">PLAN SPECIFICATIONS (STANDALONE 8820 SYSTEM):</text>
+          <text x="22" y="182" fill="#f8fafc" font-size="6.5">&bull; Standalone 47-3/4"x48" AC2 Ground Contact 2x6 frame @ 16" o.c.</text>
+          <text x="22" y="194" fill="#fbbf24" font-size="6.5">&bull; 100% straight egress &mdash; zero railing across walking path.</text>
+          <text x="22" y="206" fill="#cbd5e1" font-size="6.5">&bull; Guardrails and stair handrails strictly flank left and right perimeters.</text>
+          <!-- RIGHT SIDE: ELEVATION VIEW -->
+          <text x="380" y="20" fill="#38bdf8" font-size="8.5" font-weight="700">VIEW B-B: ELEVATION &bull; CONCRETE ANCHORING PROFILE</text>
+          <rect x="380" y="135" width="345" height="18" fill="#334155" stroke="#475569"/>
+          <text x="630" y="148" fill="#cbd5e1" font-size="6.5" font-weight="700">SOLID CONCRETE PAD</text>
+          <!-- Post Bases -->
+          <rect x="405" y="127" width="10" height="8" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.8"/>
+          <circle cx="410" cy="131" r="1.5" fill="#0f172a"/>
+          <rect x="485" y="127" width="10" height="8" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.8"/>
+          <circle cx="490" cy="131" r="1.5" fill="#0f172a"/>
+          <rect x="555" y="127" width="10" height="8" fill="#94a3b8" stroke="#cbd5e1" stroke-width="0.8"/>
+          <circle cx="560" cy="131" r="1.5" fill="#0f172a"/>
+          <!-- Landing Structure -->
+          <rect x="408" y="85" width="4" height="42" fill="#38bdf8"/>
+          <rect x="488" y="85" width="4" height="42" fill="#38bdf8"/>
+          <rect x="395" y="85" width="100" height="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+          <rect x="395" y="78" width="100" height="7" fill="#b45309" stroke="#d97706"/>
+          <text x="445" y="74" fill="#38bdf8" font-size="7" text-anchor="middle" font-weight="700">4'x4' LANDING (2x6 SOLID)</text>
+          <!-- Steps 1, 2, 3 -->
+          <rect x="495" y="97" width="24" height="38" fill="#1e293b" stroke="#fbbf24"/>
+          <rect x="495" y="95" width="25" height="6" fill="#b45309"/>
+          <text x="507" y="91" fill="#fbbf24" font-size="6" text-anchor="middle">Step 1</text>
+          <rect x="519" y="110" width="24" height="25" fill="#1e293b" stroke="#fbbf24"/>
+          <rect x="519" y="108" width="25" height="6" fill="#b45309"/>
+          <text x="531" y="104" fill="#fbbf24" font-size="6" text-anchor="middle">Step 2</text>
+          <rect x="543" y="122" width="24" height="13" fill="#1e293b" stroke="#fbbf24"/>
+          <rect x="543" y="120" width="25" height="6" fill="#b45309"/>
+          <text x="555" y="116" fill="#fbbf24" font-size="6" text-anchor="middle">Step 3</text>
+          <!-- Guardrails & Drink Rail -->
+          <rect x="396" y="40" width="4" height="45" fill="#38bdf8"/>
+          <rect x="489" y="40" width="4" height="45" fill="#38bdf8"/>
+          <rect x="394" y="37" width="100" height="4" fill="#38bdf8"/>
+          <rect x="558" y="78" width="4" height="49" fill="#fbbf24"/>
+          <line x1="492" y1="39" x2="560" y2="78" stroke="#fbbf24" stroke-width="4"/>
+          <!-- Detail Inset -->
+          <circle cx="675" cy="72" r="30" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="675" y="52" fill="#38bdf8" font-size="6.5" font-weight="700" text-anchor="middle">DRINK RAIL CAP</text>
+          <rect x="655" y="60" width="40" height="8" fill="#f59e0b" stroke="#ffffff" stroke-width="0.8"/>
+          <rect x="669" y="68" width="12" height="20" fill="#b45309" stroke="#ffffff" stroke-width="0.8"/>
+          <text x="675" y="97" fill="#cbd5e1" font-size="5.5" text-anchor="middle">Full 2x6 Flat Over 4x4</text>
+        </svg>`
+      }
+    };
+
+    function switchProject(key) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const p = projects[key];
+      document.getElementById('proj-title').innerText = p.title;
+      document.getElementById('proj-desc').innerText = p.desc;
+      document.getElementById('proj-dim').innerText = p.dim;
+
+      const beforeImg = document.getElementById('img-before');
+      const afterImg = document.getElementById('img-after');
+      beforeImg.src = p.before;
+      afterImg.src = p.after;
+
+      // Update prompt layers
+      const layerBox = document.getElementById('prompt-layers-box');
+      layerBox.innerHTML = p.layers.map(l => `<div><span class="layer-tag">${l.tag}:</span> ${l.text}</div>`).join('');
+
+      // Update CAD
+      document.getElementById('cad-viewer').innerHTML = p.svg;
+
+      // Reset slider to 50%
+      setSliderPosition(50);
+    }
+
+    // Split Slider Interaction
+    const viewport = document.getElementById('slider-viewport');
+    const afterContainer = document.getElementById('slider-after-container');
+    const handle = document.getElementById('slider-handle');
+    const afterImg = document.getElementById('img-after');
+
+    let isDragging = false;
+
+    function setSliderPosition(percentage) {
+      percentage = Math.max(0, Math.min(100, percentage));
+      afterContainer.style.width = percentage + '%';
+      handle.style.left = percentage + '%';
+
+      // Keep after image full width so it aligns perfectly with before image
+      const totalWidth = viewport.clientWidth;
+      afterImg.style.width = totalWidth + 'px';
+    }
+
+    window.addEventListener('resize', () => {
+      const percentage = parseFloat(handle.style.left) || 50;
+      setSliderPosition(percentage);
+    });
+
+    viewport.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      updateDrag(e);
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      updateDrag(e);
+    });
+
+    // Touch support
+    viewport.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      updateDrag(e.touches[0]);
+    });
+    window.addEventListener('touchend', () => { isDragging = false; });
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      updateDrag(e.touches[0]);
+    });
+
+    function updateDrag(e) {
+      const rect = viewport.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = (x / rect.width) * 100;
+      setSliderPosition(percentage);
+    }
+
+    // Initialize
+    setSliderPosition(50);
+    document.getElementById('cad-viewer').innerHTML = projects.hvac.svg;
+  </script>
+</body>
+</html>
